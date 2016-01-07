@@ -1,0 +1,73 @@
+<form method="post" class="form-inline" action="__SELF__" id="form-save">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">修改<?php echo $comment;?></h4>
+	</div>
+	<div class="modal-body">
+		<input type='hidden' name="<?php echo $pri;?>" value="<?php echo "<?php echo \$info['$pri'];?>";?>" />
+		<div style="padding:20px 20px 0 20px;">
+			<table>
+				<?php foreach($fields as $row):
+					if($row['field']==$pri || $row['type']=='timestamp')
+						continue;
+					?><tr style="margin-bottom:10px;display:block;">
+					<td width="90"><?php echo $row['comment'];?>：</td>
+					<td><?php
+						switch ($row['type']){
+							case 'char':
+							case 'varchar'://文本框
+								echo '<input type="text" class="form-control" placeholder="',$row['note'],'" name="',$row['field'],'" value="',"<?php echo \$info['{$row['field']}'];?>",'" maxlength="',$row['length'],'" />';
+								break;
+							case 'text'://文本域
+								echo '<textarea class="form-control" name="',$row['field'],'" rows="10" placeholder="',$row['note'],'">',"<?php echo \$info['{$row['field']}'];?>",'</textarea>';
+								break;
+							case 'enum'://单选框
+								$list = explode(',', substr($row['types'], 5, -1));//Array ( [0] => '显示' [1] => '隐藏' )
+								foreach ($list as $val){
+									$val = mb_substr($val, 1, -1, 'utf-8');
+									echo '<input type="radio" name="',$row['field'],'" value="',$val,'"',"<?php echo '$val'==\$info['{$row['field']}']?' checked=\"checked\"':'';?>",' />',$val;
+								}
+								break;
+							case 'smallint':
+							case 'tinyint'://选择框
+								preg_match_all('/(?:.*[:：])?(?:(-?\d)([^,.]+)),?/', $row['comment2'], $matches);
+								if (!empty($matches[1])) {
+									echo '<select name="',$row['field'],'">';
+									foreach ($matches[1] as $key => $val){
+										echo '<option value="',$val,'"',"<?php echo '$val'==\$info['{$row['field']}']?' selected=\"selected\"':'';?>",'>',$matches[2][$key],'</option>';
+									}
+									echo '</select>';
+								} else {
+									echo '<input type="text" class="form-control" placeholder="',$row['note'],'" name="',$row['field'],'" value="',"<?php echo \$info['{$row['field']}'];?>",'" />';
+								}
+								break;
+							case 'set'://复选框
+								$str = substr($row['types'], strpos($row['types'], '(')+1, -1);
+								$list = explode(',', $str);
+								foreach ($list as $val){
+									$val = mb_substr($val, 1, -1, 'utf-8');
+									echo '<input type="checkbox" class="form-control" name="',$row['field'],'[]" value="',$val,'"',"<?php echo '$val'==\$info['{$row['field']}']?' checked=\"checked\"':'';?>",' />',$val;
+								}
+								break;
+							case 'timestamp':
+								break;
+							case 'datetime':
+							case 'date':
+							case 'decimal':
+							default :
+								echo '<input type="text" class="form-control" placeholder="',$row['note'],'" name="',$row['field'],'" value="',"<?php echo \$info['{$row['field']}'];?>",'" />';
+								break;
+						}
+						if(($row['null']=='NO') && is_null($row['default']))
+							echo '<span class="text-info">*</span>';?></td>
+					</tr><?php endforeach;?>
+			</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="button" class="btn btn-primary" onclick="save()" value="确定" />
+		<input type="reset" class="btn btn-warning" value=" 重置 " />
+		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	</div>
+	<div class="error-msg"></div>
+</form>

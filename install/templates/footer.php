@@ -1,0 +1,1 @@
+<div class="footer"> &copy; 2015 <a href="http://www.thinkcmf.com" target="_blank">www.thinkcmf.com</a>官网</div>

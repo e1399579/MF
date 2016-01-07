@@ -1,0 +1,23 @@
+.progress {
+    margin-bottom: 0px;
+    height: 10px;
+}
+.header-line {
+    height: 5px;
+    width: 100%;
+    background: url("../images/headerline.png");
+}
+.bannerflash {
+    height: 800px;
+    position: absolute;
+    right: 0;
+    top: -20px;
+    width: 100%;
+    z-index: 0;
+}
+#player-btn {
+    cursor: pointer;
+}
+.navbar-toggle .icon-bar {
+    background-color: #337ab7;
+}

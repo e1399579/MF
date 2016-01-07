@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>{$title}</title>
+    <link href="__PUBLIC__/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="__PUBLIC__/css/bootstrap-theme.css" type="text/css" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <link href="__PUBLIC__/Home/css/index.css" type="text/css" rel="stylesheet">
+    <foreach name="css" item="vo"><link href="__PUBLIC__/Home/css/{$vo}" type="text/css" rel="stylesheet"></foreach>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/bootstrap.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/Home/js/index.js"></script>
+    <foreach name="js" item="vo"><script type="text/javascript" src="__PUBLIC__/Home/js/{$vo}"></script></foreach>
+</head>
+<body>
+<header role="banner" id="top" class="navbar navbar-static-top bs-docs-nav bg-info">
+    <div class="container">
+        <div class="navbar-header">
+            <button aria-expanded="false" aria-controls="bs-navbar" data-target="#bs-navbar" data-toggle="collapse"
+                    type="button" class="navbar-toggle collapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Banner</a>
+        </div>
+        <nav class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/">首页</a>
+                </li>
+                <li>
+                    <a href="/">模块</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="icon-pause" id="player-btn"></a></li>
+                <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        playlist<span class="caret"></span>
+                    </a>
+                    <audio id="audio" controls="controls" style="display: none;"></audio>
+                    <ul class="dropdown-menu" id="player">
+                        <foreach name="music" item="vo">
+                        <li data="{$vo.path}">
+                            <a href="#">{$vo.artist} - {$vo.title}
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0"
+                                         aria-valuemax="100" style="width: 0%;">
+                                        <span class="sr-only">0%</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        </foreach>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="header-line"></div>
+</header>
+
+<div class="bannerflash">
+    <object width="100%" height="800"
+            codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0"
+            classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+        <param value="__PUBLIC__/Home/images/main.swf" name="movie">
+        <param value="high" name="quality">
+        <param value="transparent" name="wmode">
+        <embed width="100%" height="800" wmode="transparent" type="application/x-shockwave-flash"
+               pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="__PUBLIC__/Home/images/main.swf">
+    </object>
+</div>
+
+{__CONTENT__}
+</body>
+</html>

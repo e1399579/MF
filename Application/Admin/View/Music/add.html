@@ -1,0 +1,57 @@
+<form enctype="multipart/form-data" method="post" action="__SELF__" class="form-inline" id="form-add">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">添加音乐</h4>
+	</div>
+	<div class="modal-body">
+		<div style="padding:20px 20px 0 20px;">
+			<table>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">标题：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="标题" name="title" value="" maxlength="30" /><span class="text-info">*</span>					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">艺术家：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="艺术家" name="artist" value="" maxlength="30" /><span class="text-info">*</span>					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">文件路径：</td>
+					<td>
+						<input type="file" class="btn btn-info" name="path" /><span class="text-info">*</span>					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">专辑：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="专辑" name="album" value="" maxlength="30" />					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">发行年份：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="发行年份" name="publish_time" value="1970" />					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">封面：</td>
+					<td>
+						<input type="file" class="btn btn-info" name="cover" />
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">排序：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="排序" name="list_order" value="0" />					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">状态：</td>
+					<td>
+						<select name="status"><option value="1" selected="selected">启用</option><option value="0">禁用</option></select>					</td>
+					</tr>
+							</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="button" class="btn btn-primary" onclick="add()" value="确定" />
+		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	</div>
+	<div class="error-msg"></div>
+</form>

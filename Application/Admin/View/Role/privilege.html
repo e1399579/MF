@@ -1,0 +1,60 @@
+<form method="post" action="__CONTROLLER__/auth" class="form-inline" id="form-auth">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">权限设置</h4>
+	</div>
+	<div class="modal-body">
+		<div style="padding:20px 20px 0 20px;">
+			<?php foreach ($tree as $row):?>
+				<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $row['deep']);?>
+				<input type="checkbox" name="id[]" value="<?php echo $row['menu_id']?>" deep="<?php echo $row['deep'];?>"<?php echo in_array($row['module'].$row['controller'].$row['action'], $mca)?' checked="checked"':'';?>/>
+				<?php echo $row['name'];?><br />
+			<?php endforeach;?>
+			<input type="hidden" name="role_id" value="<?php echo $role_id;?>" />
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="button" class="btn btn-primary" onclick="ajaxPost('__CONTROLLER__/auth', '#form-auth')" value="确定" />
+		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	</div>
+	<div class="error-msg"></div>
+</form>
+<script type="text/javascript">
+	$(":checkbox").click(function(){
+		if ($(this).is(":checked")) {
+			var deep,deep2;
+			deep = deep2 = $(this).attr("deep");
+			//选中上级
+			$(this).prevAll(":checkbox").each(function(i, n){
+				if ($(n).attr('deep') < deep) {
+					deep--;
+					$(n).prop('checked', 'checked');
+				}
+			});
+			//选中下级
+			$(this).nextAll(":checkbox").each(function(i, n){
+				if (($(n).attr("deep") > deep2)) {
+					if (($(n).next().next(":checkbox").attr("deep") > deep)) {
+						$(this).prop('checked', 'checked');
+					} else {
+						$(this).prop('checked', 'checked');
+						deep2++;
+					}
+				}
+			});
+		} else {
+			var deep = $(this).attr("deep");
+			//取消下级
+			$(this).nextAll(":checkbox").each(function(i, n){
+				if (($(n).attr("deep") > deep)) {
+					if (($(n).next().next(":checkbox").attr("deep") > deep)) {
+						$(this).removeProp("checked");
+					} else {
+						$(this).removeProp("checked");
+						deep++;
+					}
+				}
+			});
+		}
+	});
+</script>

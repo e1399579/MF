@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>代码生成器</title>
+	<style type="text/css">
+		.color-red{
+			margin-left:8px;
+			color:red;
+			font-size:12px;
+		}
+		.table-width{
+			display:inline-block;
+			width:210px;
+			margin:0 10px 5px 0;
+		}
+	</style>
+</head>
+<body>
+<form method='post' action='__SELF__'>
+	<div style="display: inline-block;">表名:</div>
+	<div style="width:1120px;display:inline-block;vertical-align:top;">
+		<?php foreach ($tables as $row):?>
+		<div class="table-width">
+			<input type="radio" name='tableName' value="<?php echo $row['table_name'];?>" />
+			<?php echo $row['table_name'];?>
+		</div>
+	   <?php endforeach;?>
+	</div>
+	   <span class="color-red">*选择相应的表</span>
+	<br />
+	模块:<input type='text' name='moduleName' /><span class="color-red">*应用模块名(例:Home)</span>
+	<input type="checkbox" name="is_controller" checked />控制器
+	<input type="checkbox" name="is_model" checked />模型
+	<input type="checkbox" name="is_view" checked />视图<br />
+	按钮:<input type='text' name='btnName' />
+	<span class="color-red">后台管理菜单</span>
+	<input type="checkbox" name="is_menu" checked /><br />
+	图标:<input type="text" name="icon" /><span class="color-red">例:icon-plus</span>
+	<a href="http://www.bootcss.com/p/font-awesome/" target="_blank">所有图标</a><br />
+	风格:<input type="radio" name='version' value="" checked />卡片
+	<br />
+	<input type='submit' value='生成' />
+</form>
+<br /><br />
+<form method="post" action="{:U('analyze')}">
+	模　块:<input type='text' name='moduleName' /><span class="color-red">*应用模块名(例:Home)</span><br />
+	控制器:<input type='text' name='controllerName' /><span class="color-red">*控制器名(例:Index)</span><br />
+	<input type='submit' value='分析菜单' />
+</form>
+</body>
+</html>

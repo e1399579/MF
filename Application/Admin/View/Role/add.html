@@ -1,0 +1,31 @@
+<form method="post" action="__SELF__" class="form-inline" id="form-add">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">添加角色</h4>
+	</div>
+	<div class="modal-body">
+		<div style="padding:20px 20px 0 20px;">
+			<table>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">角色名称：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="角色名称" name="name" value="" maxlength="30" /><span class="text-info">*</span>					</td>
+				</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">备注：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="备注" name="remarks" value="" maxlength="255" />					</td>
+					</tr>
+				<tr style="margin-bottom:10px;display:block;">
+					<td width="90">排序：</td>
+					<td>
+						<input type="text" class="form-control" placeholder="排序" name="list_order" value="0" />					</td>
+					</tr>			</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<input type="button" class="btn btn-primary" onclick="add()" value="确定" />
+		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+	</div>
+	<div class="error-msg"></div>
+</form>

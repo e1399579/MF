@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+<form method="post" action="buildMenu">
+  <table>
+    <tr><td colspan="2"><?php echo $con;?></td></tr>
+    <tr><th>方法</th><th>菜单名称</th></tr>
+    <?php foreach ($menu as $val): ?>
+    <tr>
+      <td><?php echo $val,'：';?></td><td><input type="text" name="menu[<?php echo $val;?>]" /></td>
+    </tr>
+    <?php endforeach;?>
+    <tr>
+      <input type="hidden" name="module" value="<?php echo $module;?>" />
+      <input type="hidden" name="controller" value="<?php echo $controller;?>" />
+      <td colspan="2"><input type="submit" value="生成菜单" /></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

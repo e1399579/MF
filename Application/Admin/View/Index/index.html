@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <!-- Title and other stuffs -->
+  <title>后台管理系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="author" content="">
+  <!-- Stylesheets -->
+  <link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
+  <!-- Font awesome icon -->
+  <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.css">
+  <!-- Main stylesheet -->
+  <link href="__PUBLIC__/Admin/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+<!-- Header starts -->
+  <header id="header">
+    <div class="container-full">
+      <div class="row" style="margin: 0;">
+
+        <!-- Logo section -->
+        <div class="col-md-3 col-sm-0 col-xs-0">
+          <!-- Logo. -->
+           <div class="logo">
+            <h1><a href="#">MF<span class="bold"></span></a></h1>
+            <p class="meta">后台管理系统</p>
+          </div>
+          <!-- Logo ends -->
+        </div>
+
+        <!-- Button section -->
+        <div class="col-md-3 col-sm-3 col-xs-3">
+
+          <!-- Buttons -->
+          <ul class="nav nav-pills">
+
+            <!-- Comment button with number of latest comments count -->
+            <li class="dropdown dropdown-big">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                <i class="icon-comments"></i> Chats <span   class="label label-info">1</span>
+              </a>
+
+                <ul class="dropdown-menu">
+                  <li>
+                    <!-- Heading - h5 -->
+                    <h5><i class="icon-comments"></i> Chats</h5>
+                    <!-- Use hr tag to add border -->
+                    <hr />
+                  </li>
+                  <li>
+                    <!-- List item heading h6 -->
+                    <h6><a href="#">Hi :)</a> <span class="label label-warning pull-right">10:42</span></h6>
+                    <div class="clearfix"></div>
+                    <hr />
+                  </li>
+                  <li>
+                    <div class="drop-foot">
+                      <a href="#">View All</a>
+                    </div>
+                  </li>                                    
+                </ul>
+            </li>
+          </ul>
+
+        </div>
+
+        <!-- Data section -->
+
+        <div class="col-md-5 col-sm-7 col-xs-7">
+          <div class="header-data">
+
+            <!-- Traffic data -->
+            <div class="hdata">
+              <div class="mcol-left">
+                <!-- Icon with red background -->
+                <i class="icon-signal bred"></i> 
+              </div>
+              <div class="mcol-right">
+                <!-- Number of visitors -->
+                <p><a href="#">0</a> <em>访问</em></p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <!-- Members data -->
+            <div class="hdata">
+              <div class="mcol-left">
+                <!-- Icon with blue background -->
+                <i class="icon-user bblue"></i> 
+              </div>
+              <div class="mcol-right">
+                <!-- Number of visitors -->
+                <p><a href="#">0</a> <em>用户</em></p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+            <!-- revenue data -->
+            <div class="hdata">
+              <div class="mcol-left">
+                <!-- Icon with green background -->
+                <i class="icon-money bgreen"></i> 
+              </div>
+              <div class="mcol-right">
+                <!-- Number of visitors -->
+                <p><a href="#">0</a><em>订单</em></p>
+              </div>
+              <div class="clearfix"></div>
+            </div>                        
+
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="col-md-1 col-sm-2 col-xs-2">
+        <ul class="nav navbar-nav" style="margin-top:10px;">
+          <li class="dropdown pull-right">            
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+              <i class="icon-user"></i> <?php echo $_SESSION['username'];?> <b class="caret"></b>
+            </a>
+            
+            <!-- Dropdown menu -->
+            <ul class="dropdown-menu">
+              <li><a href="#"><i class="icon-user"></i> 个人配置</a></li>
+              <li><a href="#"><i class="icon-cogs"></i> 站点设置</a></li>
+              <li><a href="{:U('Admin/Public/logout')}"><i class="icon-off"></i> 退出</a></li>
+            </ul>
+          </li>
+          
+        </ul>
+        </div>
+    </div>
+  </header>
+
+<!-- Header ends -->
+
+<!-- Main content starts -->
+
+<div class="content row" style="margin: 0;padding: 0;">
+
+  	<!-- Sidebar -->
+    <div class="sidebar col-lg-2 col-md-2 col-sm-0 col-xs-0">
+        <div class="sidebar-dropdown btn-info"><a href="#">管理菜单</a></div>
+
+        <!--- Sidebar navigation -->
+        <!-- If the main navigation has sub navigation, then add the class "has_sub" to "li" of main navigation. -->
+        <ul id="nav">
+          <!--<li class="has_sub"><a href="#"><i class="icon-file-alt"></i> Pages #1  <span class="pull-right"><i class="icon-chevron-right"></i></span></a>
+            <ul>
+              <li><a href="main.html">Post</a></li>
+              <li><a href="login.html">Login</a></li>
+            </ul>
+          </li>
+          <li><a href="{:U('main')}" class="open"><i class="icon-table"></i> Tables</a></li>-->
+          <?php foreach ($menu as $key => $row):
+            if(empty($row['child'])):
+            ?><li><a href="<?php echo U($row['module'].'/'.$row['controller'].'/'.$row['action']);?>"><i class="<?php echo $row['icon']?$row['icon']:'icon-list';?>"></i> <?php echo $row['name'];?></a></li>
+            <?php else:?><li class="has_sub"><a href="#"><i class="<?php echo $row['icon']?$row['icon']:'icon-list';?>"></i> <?php echo $row['name'];?><span class="pull-right"><i class="icon-chevron-right"></i></span></a>
+              <ul><?php foreach ($row['child'] as $row2):?>
+                <li><a href="<?php echo U($row['module'].'/'.$row['controller'].'/'.$row['action']);?>"><?php echo $row2['name'];?></a></li>
+                <?php endforeach;?>
+              </ul>
+            </li>
+          <?php endif;endforeach;?>
+        </ul>
+    </div>
+
+    <!-- Sidebar ends -->
+    <!--大屏幕、中等屏幕 、小屏幕：2/10，超小屏幕：0/12-->
+  	<iframe class="col-lg-10 col-md-10 col-sm-12 col-xs-12" src="{:U('main')}" style="padding:0;min-height:800px;" frameborder="0" id="frame"></iframe>
+
+   <!-- Mainbar ends -->	    	
+   <div class="clearfix"></div>
+
+</div>
+<!-- Content ends -->
+
+<!-- Footer starts -->
+<footer>
+  <div class="container-full">
+    <div class="row" style="margin: 0;">
+      <div class="col-md-12">
+            <!-- Copyright info -->
+            <p class="copy">Copyright &copy; 2015 | <a href="{:U('/')}" target="_blank">我的网站</a> </p>
+      </div>
+    </div>
+  </div>
+</footer> 	
+
+<!-- Footer ends -->
+
+<!-- Scroll to top -->
+<span class="totop"><a href="#"><i class="icon-chevron-up"></i></a></span> 
+
+<!-- JS -->
+<script src="__PUBLIC__/js/jquery.js"></script> <!-- jQuery -->
+<script src="__PUBLIC__/js/bootstrap.js"></script> <!-- Bootstrap -->
+<script src="__PUBLIC__/Admin/js/custom.js"></script> <!-- Custom codes -->
+<script type="text/javascript">
+  //iframe高度
+  $("#frame").height($("#nav").height()+200);
+</script>
+</body>
+</html>
