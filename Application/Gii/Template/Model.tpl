@@ -11,8 +11,8 @@ class <?php echo $tn;?>Model extends Model {
 	<?php endforeach;?>);
 
 	public function search() {
-		$perpage = 10;
-		$where = 1;
+		$list = 10;
+		$where = '1';
 		<?php
     	foreach($fields as $row):
     	if($row['field']==$pri || empty($row['key']))
@@ -20,7 +20,7 @@ class <?php echo $tn;?>Model extends Model {
     	?>if ($<?php echo $row['field'];?> = I('get.<?php echo $row['field'];?>'))
 			$where .= " AND <?php echo $row['field'];?> LIKE '%{$<?php echo $row['field'];?>}%'";
     	<?php endforeach;?>$total = $this->where($where)->count();
-		$page = new \Think\Page($total,$perpage);
+		$page = new \Think\Page($total,$list);
 		$page->setConfig('first','首页');
 		$page->setConfig('last','尾页');
 		$page->setConfig('prev','上一页');
