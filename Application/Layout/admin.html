@@ -51,6 +51,7 @@
     //分页字符串，考虑某些页面没有分页字符串的情况
     if (($("body").find("#page").length)) {
         var page = $("#page").html();
+        page = page.replace(/<\/?div>/gi, "");
         page = page.replace(/<a(.*?)>(.*?)<\/a>/gi, "<li><a$1>$2</a></li>");
         page = page.replace(/<span(.*?)>(.*?)<\/span>/, "<li><span$1>$2</span></li>");
         $("#page").html(page);
@@ -94,12 +95,13 @@
 
     //搜索表单相关
     $(function () {
-        replace();
+        if (($("body").find("#page").length)) replace();
         $('[data-toggle="popover"]').popover();
     });
     var curr = 1;
     //链接转为点击事件
     function replace() {
+        $("#page").html($("#page").html().replace(/<\/?div>/gi, ""));
         $.each($("#page a"), function (i, n) {
             var str = $(this).attr("href");
             var p = str.match(/p[\/\?]=?(\d+)/);
