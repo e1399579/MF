@@ -22,6 +22,7 @@ class <?php echo $tn;?>Model extends Model {
     	<?php endforeach;?>$total = $this->where($where)->count();
 		$page = new \Think\Page($total,$list);
 		$page->setConfig('first','首页');
+		$page->lastSuffix = false;
 		$page->setConfig('last','尾页');
 		$page->setConfig('prev','上一页');
 		$page->setConfig('next','下一页');

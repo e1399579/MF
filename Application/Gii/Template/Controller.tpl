@@ -1,5 +1,5 @@
 namespace <?php echo $moduleName;?>\Controller;
-use \Admin\Controller\AuthController;
+use Admin\Controller\AuthController;
 class <?php echo $tn;?>Controller extends AuthController {
 	public function index() {
 		$model = D('<?php echo $tn;?>');

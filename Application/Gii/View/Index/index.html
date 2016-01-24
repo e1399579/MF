@@ -11,7 +11,7 @@
 		}
 		.table-width{
 			display:inline-block;
-			width:210px;
+			width:auto;
 			margin:0 10px 5px 0;
 		}
 	</style>
@@ -19,7 +19,7 @@
 <body>
 <form method='post' action='__SELF__'>
 	<div style="display: inline-block;">表名:</div>
-	<div style="width:1120px;display:inline-block;vertical-align:top;">
+	<div style="width:auto;display:inline-block;">
 		<?php foreach ($tables as $row):?>
 		<div class="table-width">
 			<input type="radio" name='tableName' value="<?php echo $row['table_name'];?>" />
@@ -38,8 +38,6 @@
 	<input type="checkbox" name="is_menu" checked /><br />
 	图标:<input type="text" name="icon" /><span class="color-red">例:icon-plus</span>
 	<a href="http://www.bootcss.com/p/font-awesome/" target="_blank">所有图标</a><br />
-	风格:<input type="radio" name='version' value="" checked />卡片
-	<br />
 	<input type='submit' value='生成' />
 </form>
 <br /><br />

@@ -1,8 +1,10 @@
 <layout name="../../Layout/admin" />
 <!-- Page heading -->
 <div class="page-head">
-    <h2 class="pull-left" id="table-title"><i class="<?php echo "<?php echo \$menu['icon'];?>"?>"></i> <?php echo "<?php echo \$menu['name'];?>"?></h2>
-    <div class="pull-right" style="cursor: pointer;line-height: 43px;"><i class="icon-fullscreen" onclick="ctrl(this)"></i></div>
+    <h2 class="pull-left" id="table-title"><i class="%ICON%"></i> %MENU%</h2>
+    <div class="pull-right" style="cursor: pointer;line-height: 43px;">
+        <i class="icon-fullscreen" onclick="ctrl(this)"></i>
+    </div>
     <div class="clearfix"></div>
 </div>
 <!-- Page heading ends -->
@@ -11,77 +13,37 @@
 
 <div class="matter">
     <div class="container">
-
-        <!-- Table -->
-
-        <div class="row">
-
-            <div class="col-md-12">
-                <div class="widget">
-
-                    <div class="widget-head">
-
-                        <form class=" form-inline" method="get" action="__ACTION__" id="form-search">
-                            <?php
-                            foreach($fields as $row):
-                            if($row['field']==$pri || empty($row['key']))
-                                continue;
-                            echo $row['comment'];
-                            ?>
-                            <input type="text" placeholder="<?php echo $row['note'];?>" name="<?php echo $row['field'];?>" class="form-control" value="<?php echo "<?php echo I('get.{$row['field']}');?>";?>">
-                            <?php endforeach;?><button type="submit" class="btn btn-info"  onclick="return search('#form-search')">搜索</button>
-
-                            <a class="btn btn-info pull-right" href="__CONTROLLER__/add" data-toggle="modal" data-target="#myModal"><i class="icon-plus"></i>添加<?php echo $comment;?></a>
-
-                        </form>
-
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div class="widget-content">
-                        <form method="post" action="__CONTROLLER__/bdel">
-                            <table class="table table-striped table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th><input type="checkbox" class="check_all" /></th>
-                                    <?php foreach($fields as $row):?><th><?php echo $row['comment'];?></th>
-                                    <?php endforeach;?><th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody id="form-list">
-                                    <?php echo '<?php foreach($data as $row):?>';?><tr>
-                                        <td><input type="checkbox" name="delid[]" data="id" value="<?php echo "<?php echo \$row['$pri'];?>";?>"></td>
-                                        <?php
-                                            foreach($fields as $row):
-                                        ?><td><?php echo "<?php echo \$row['{$row['field']}'];?>";?></td>
-                                        <?php endforeach;?><td>
-                                            <a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/<?php echo "<?php echo \$row['$pri'];?>";?>" data-toggle="modal" data-target="#myModal">
-                                                <i class="icon-pencil"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-xs btn-danger" data-toggle="popover" data-placement="left" data-title="是否删除？" data-html="true" data-content="<button type='button' class='btn btn-danger' onclick='del(this)'>确定</button> <button type='button' class='btn btn-default' onclick='$(this).parent().parent().prev().click()'>取消</button>">
-                                                <a class="a-color" href="__CONTROLLER__/del/id/<?php echo "<?php echo \$row['$pri'];?>";?>"><i class="icon-remove"></i></a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <?php echo '<?php endforeach;?>';?>
-                                </tbody>
-                            </table>
-
-                            <div class="widget-foot">
-                                <div class="pagination">
-                                    <label><input id="check_all" class="check_all" type="checkbox">全选</label>
-                                    <input class="btn btn-danger" value="删除" onclick="return confirm('确定批量删除吗？')" type="submit" />
-                                </div>
-                                <ul class="pagination pull-right" id="page">
-                                    <?php echo '<?php echo $page;?>';?>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <!-- Table -->
+    <div class="row col-md-12">
+    <div class="widget">
+        <div class="widget-head">
+            %HEAD%
+            <div class="clearfix"></div>
         </div>
+
+        <form method="post" action="__CONTROLLER__/bdel">
+        <div class="widget-content">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    %TITLE%
+                </thead>
+                <tbody id="form-list"></tbody>
+            </table>
+        </div>
+
+        <div class="widget-foot">
+            <div class="pagination">
+                <label><input id="check_all" class="check_all" type="checkbox">全选</label>
+                <input class="btn btn-danger" value="删除" onclick="return confirm('确定批量删除吗？')" type="submit" />
+            </div>
+            <ul class="pagination pull-right" id="page">
+                %PAGE%
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        </form>
+    </div>
+    </div>
     </div>
 </div>
 <!-- Modal -->
@@ -92,39 +54,5 @@
 </div>
 
 <script type="text/javascript">
-    function getList(form){
-        $.ajax({
-            type:"get",
-            url:"__CONTROLLER__/search",
-            data:$(form).serialize()+"&p="+curr,
-            dataType:"json",
-            success:function(data){
-                var list = data.data;
-                if(list == null){
-                    $("#form-list").html("");
-                    $("#page").html("");
-                    return;
-                }
-                var html = "";
-                for(var i in list){
-                    html += '<tr><td><input type="checkbox" name="delid[]" data="id" value="'+list[i].<?php echo $pri;?>+'"></td>';
-                    <?php foreach($fields as $row):?>html += '<td>'+list[i].<?php echo $row['field']?>+'</td>';
-                    <?php endforeach;?>
-                    html += '<td><a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/'+list[i].<?php echo $pri;?>+'" data-toggle="modal" data-target="#myModal"><i class="icon-pencil"></i></a> ';
-                    html += '<button type="button" class="btn btn-xs btn-danger" data-toggle="popover" data-placement="left" data-title="是否删除？" data-html="true" '+
-                        'data-content="<button type=\'button\' class=\'btn btn-danger\' onclick=\'del(this)\'>确定</button> '+
-                        '<button type=\'button\' class=\'btn btn-default\' onclick=\'$(this).parent().parent().prev().click()\'>取消</button>">'+
-                        '<a class="a-color" href="__CONTROLLER__/del/id/'+list[i].<?php echo $pri;?>+'"><i class="icon-remove"></i></a></button></td></tr>';
-                }
-                $("#form-list").html(html);
-                var page = data.page;
-                page = page.replace(/<a(.*?)>(.*?)<\/a>/gi, "<li><a$1>$2</a></li>");
-                page = page.replace(/<span(.*?)>(.*?)<\/span>/, "<li><span$1>$2</span></li>");
-                $("#page").html(page);
-                $('button[data-toggle="popover"]').popover();//重新载入弹出框
-                replace();
-            }
-        });
-        return false;
-    }
+%LIST%
 </script>
