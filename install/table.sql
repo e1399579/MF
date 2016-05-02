@@ -57,7 +57,7 @@ CREATE TABLE `mf_music` (
    `music_md5` char(32) NOT NULL DEFAULT '' COMMENT 'md5值',
    `size` int(11) NOT NULL DEFAULT '0' COMMENT '文件大小',
    `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1启用,0禁用',
-   `update_time` timestamp NOT NULL COMMENT '更新时间',
+   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
    PRIMARY KEY (`music_id`),
    KEY `title` (`title`),
    KEY `artist` (`artist`)

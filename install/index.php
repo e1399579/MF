@@ -89,7 +89,7 @@ switch ($step) {
         } else {
             $gd = '<font color=green>[√]On</font> ' . $tmp['GD Version'];
         }
-        if (function_exists('mysql_connect')) {
+        if (function_exists('mysqli_connect')) {
             $mysql = '<span class="correct_span">&radic;</span> 已安装';
         } else {
             $mysql = '<span class="correct_span error_span">&radic;</span> 出现错误';
@@ -127,7 +127,7 @@ switch ($step) {
 
         if ($_GET['testdbpwd']) {
             $dbHost = $_POST['dbHost'] . ':' . $_POST['dbPort'];
-            $conn = @mysql_connect($dbHost, $_POST['dbUser'], $_POST['dbPwd']);
+            $conn = @mysqli_connect($dbHost, $_POST['dbUser'], $_POST['dbPwd']);
             if ($conn) {
                 die("1");
             } else {
@@ -155,23 +155,23 @@ switch ($step) {
             $password = trim($_POST['manager_pwd']);
             $email	  = trim($_POST['manager_email']);
 
-            $conn = @ mysql_connect($dbHost, $dbUser, $dbPwd);
+            $conn = @ mysqli_connect($dbHost, $dbUser, $dbPwd);
             if (!$conn) {
                 $arr['msg'] = "连接数据库失败!";
                 echo json_encode($arr);
                 exit;
             }
-            mysql_query("SET NAMES 'utf8'"); //,character_set_client=binary,sql_mode='';
-            $version = mysql_get_server_info($conn);
+            mysqli_query($conn, "SET NAMES 'utf8'"); //,character_set_client=binary,sql_mode='';
+            $version = mysqli_get_server_info($conn);
             if ($version < 4.1) {
                 $arr['msg'] = '数据库版本太低!';
                 echo json_encode($arr);
                 exit;
             }
 
-            if (!mysql_select_db($dbName, $conn)) {
+            if (!mysqli_select_db($conn, $dbName)) {
                 //创建数据时同时设置编码
-                if (!mysql_query("CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARACTER SET utf8;", $conn)) {
+                if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARACTER SET utf8;", $conn)) {
                     $arr['msg'] = '数据库 ' . $dbName . ' 不存在，也没权限创建新的数据库！';
                     echo json_encode($arr);
                     exit;
@@ -182,7 +182,7 @@ switch ($step) {
                     echo json_encode($arr);
                     exit;
                 }
-                mysql_select_db($dbName, $conn);
+                mysqli_select_db($conn, $dbName);
             }
 
             //读取数据文件
@@ -197,10 +197,11 @@ switch ($step) {
 
             for ($i = $n; $i <= $counts; $i++) {
                 $sql = $sqlFormat[$i-1];
+                if (empty($sql)) continue;
                 if (strstr($sql, 'CREATE TABLE')) {
                     preg_match('/CREATE TABLE `([^ ]*)`/', $sql, $matches);
-                    //mysql_query("DROP TABLE IF EXISTS `$matches[1]");
-                    $ret = mysql_query($sql);
+                    //mysqli_query($conn, "DROP TABLE IF EXISTS `$matches[1]");
+                    $ret = mysqli_query($conn, $sql);
 
                     if ($ret) {
                         $message = '<li><span class="correct_span">&radic;</span>创建数据表' . $matches[1] . '，完成</li>';
@@ -212,7 +213,7 @@ switch ($step) {
                     echo json_encode($arr);
                     exit;
                 } else {
-                    $ret = mysql_query($sql);
+                    $ret = mysqli_query($conn, $sql);
                 }
             }
             if ($i == 999999) exit;
@@ -233,7 +234,7 @@ switch ($step) {
 			$query ="INSERT INTO `{$dbPrefix}admin`
                     (admin_id,username,password,email,register_time,role_id)
                     VALUES ('1', '{$username}', '{$password}', '{$email}', now(), '1');";
-            mysql_query($query);
+            mysqli_query($conn, $query);
 
             $message = '成功添加管理员<br />成功写入配置文件<br>安装完成．';
             $arr = array('n' => 999999, 'msg' => $message);
@@ -266,19 +267,6 @@ function testwrite($d) {
     return false;
 }
 
-function sql_execute($sql, $tablepre) {
-    $sqls = sql_split($sql, $tablepre);
-    if (is_array($sqls)) {
-        foreach ($sqls as $sql) {
-            if (trim($sql) != '') {
-                mysql_query($sql);
-            }
-        }
-    } else {
-        mysql_query($sqls);
-    }
-    return true;
-}
 
 function sql_split($sql, $tablepre) {
 
@@ -286,8 +274,6 @@ function sql_split($sql, $tablepre) {
         $sql = str_replace("mf_", $tablepre, $sql);
     $sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
 
-    if ($r_tablepre != $s_tablepre)
-        $sql = str_replace($s_tablepre, $r_tablepre, $sql);
     $sql = str_replace("\r", "\n", $sql);
     $ret = array();
     $num = 0;
@@ -297,10 +283,10 @@ function sql_split($sql, $tablepre) {
         $ret[$num] = '';
         $queries = explode("\n", trim($query));
         $queries = array_filter($queries);
-        foreach ($queries as $query) {
-            $str1 = substr($query, 0, 1);
+        foreach ($queries as $query2) {
+            $str1 = substr($query2, 0, 1);
             if ($str1 != '#' && $str1 != '-')
-                $ret[$num] .= $query;
+                $ret[$num] .= $query2;
         }
         $num++;
     }
@@ -338,7 +324,6 @@ function get_client_ip() {
 function dir_create($path, $mode = 0777) {
     if (is_dir($path))
         return TRUE;
-    $ftp_enable = 0;
     $path = dir_path($path);
     $temp = explode('/', $path);
     $cur_dir = '';
@@ -347,8 +332,8 @@ function dir_create($path, $mode = 0777) {
         $cur_dir .= $temp[$i] . '/';
         if (@is_dir($cur_dir))
             continue;
-        @mkdir($cur_dir, 0777, true);
-        @chmod($cur_dir, 0777);
+        @mkdir($cur_dir, $mode, true);
+        @chmod($cur_dir, $mode);
     }
     return is_dir($path);
 }
