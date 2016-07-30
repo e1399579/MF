@@ -6,13 +6,14 @@ class RoleModel extends Model {
 		array('name','require','角色名称不能为空'),
 	array('create_time','require','创建时间不能为空'),
 	);
+
 	public function search() {
 		$perpage = 10;
 		$where = 1;
 		if ($name = I('get.name'))
-			$where .= " AND name LIKE '%{$name}%'";
+			$where['name'] = array('LIKE', "%{$name}%");
     	if ($list_order = I('get.list_order'))
-			$where .= " AND list_order LIKE '%{$list_order}%'";
+			$where['list_order'] = $list_order;
     	$total = $this->where($where)->count();
 		$page = new \Think\Page($total,$perpage);
 		$page->setConfig('first','首页');

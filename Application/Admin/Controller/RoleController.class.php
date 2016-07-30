@@ -1,12 +1,18 @@
 <?php
 namespace Admin\Controller;
+use Admin\Model\MenuModel;
 
 class RoleController extends AuthController {
 	public function index() {
 		$model = D('Role');
 		$data = $model->search();
 		$this->assign($data);
-		$menu = M('Menu')->where('module="'.MODULE_NAME.'" AND controller="'.CONTROLLER_NAME.'" AND action="'.ACTION_NAME.'"')->order('menu_id DESC')->find();
+		$map = array(
+			'module' => MODULE_NAME,
+			'controller' => CONTROLLER_NAME,
+			'action' => ACTION_NAME,
+		);
+		$menu = M('Menu')->where($map)->order('menu_id DESC')->find();
 		$this->assign('menu', $menu);
 		$this->display();
 	}
@@ -106,14 +112,11 @@ class RoleController extends AuthController {
 		if ($aff === false) {
 			$this->error('授权失败！');
 		} else {
-			//刷新角色缓存
-			$key = 'menu' . $role_id;
-			$menuModel = D('Menu');
-			$menu = $menuModel->getTreeByMenuId($data['menu_id_list']);
-			F($key, $menu);
+			//清空角色的菜单缓存
+			$menuModel = new MenuModel();
+			$menuModel->flushMenuCache($role_id);
+
 			$this->success('授权成功！');
 		}
 	}
-
-
 }

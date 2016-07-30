@@ -14,9 +14,9 @@ class MusicModel extends Model {
         $perpage = 10;
         $where = 1;
         if ($title = I('get.title'))
-            $where .= " AND title LIKE '%{$title}%'";
+	        $where['title'] = array('LIKE', "%{$title}%");
         if ($artist = I('get.artist'))
-            $where .= " AND artist LIKE '%{$artist}%'";
+	        $where['artist'] = array('LIKE', "%{$artist}%");
         $total = $this->where($where)->count();
         $page = new \Think\Page($total, $perpage);
         $page->setConfig('first', '首页');

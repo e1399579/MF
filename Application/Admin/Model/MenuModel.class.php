@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Model;
 use Think\Model;
+
 class MenuModel extends Model {
 	protected $_validate = array(
 		array('module','require','模块不能为空'),
@@ -8,13 +9,14 @@ class MenuModel extends Model {
 		array('action','require','方法不能为空'),
 		array('name','require','菜单名称不能为空'),
 	);
+
 	public function search() {
 		$perpage = 10;
-		$where = 1;
+		$where = array();
 		if ($name = I('get.name'))
-			$where .= " AND name LIKE '%{$name}%'";
+			$where['name'] = array('LIKE', "%{$name}%");
     	if ($controller = I('get.controller'))
-			$where .= " AND controller LIKE '%{$controller}%'";
+			$where['controller'] = array('LIKE', "%{$controller}%");
     	$total = $this->where($where)->count();
 		$page = new \Think\Page($total,$perpage);
 		$page->setConfig('first','首页');
@@ -31,11 +33,12 @@ class MenuModel extends Model {
 	}
 
 	public function _before_write(&$data) {
-		F('menu', null);//清空缓存
+		//TODO 清除所有关联该菜单角色的缓存
+		$this->flushMenuCache();
 	}
 
 	public function _before_delete($options) {
-		F('menu', null);//清空缓存
+		$this->flushMenuCache();
 	}
 
 	public function getTree(&$data, $pid=0, $deep=0, $is_clear=true) {
@@ -93,5 +96,37 @@ class MenuModel extends Model {
 			}
 		}
 		return $child;
+	}
+
+	public function getMenuByRoleId($role_id) {
+		$this->initCache();
+		$key = 'menu' . $role_id;
+		$menu = S($key);
+		if (empty($menu)) {
+			if ($role_id == 1) {//管理员显示全部菜单
+				$menu = $this->getTreeByMenuId('*');
+			} else {
+				$ids = M('Role')->where(array('role_id' => $role_id))->getField('menu_id_list');
+				$menu = $this->getTreeByMenuId($ids);
+			}
+			S($key, $menu);
+		}
+		return $menu;
+	}
+
+	public function initCache() {
+		S(array(
+			'type'      => 'memcached',
+			'host'      => '127.0.0.1',
+			'port'      => '11211',
+			'prefix'    => 'think',
+		));
+	}
+
+	public function flushMenuCache($role_id=null) {
+		$this->initCache();
+		$role_id or $role_id = $_SESSION['role_id'];
+		$key = 'menu' . $role_id;
+		S($key, null);//清空缓存
 	}
 }

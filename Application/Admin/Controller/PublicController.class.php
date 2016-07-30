@@ -6,16 +6,15 @@
  * Time: 15:16
  */
 namespace Admin\Controller;
-use Think\Controller;
+use Think\Controller, Admin\Model\MenuModel;
+
 class PublicController extends Controller {
     /**
      * 登录
      */
     public function login() {
-        if (!empty($_COOKIE['PHPSESSID'])) {
-            session_start();
-            isset($_SESSION['admin_id']) and $this->redirect('Admin/Index/index');
-        }
+        isset($_SESSION) or session_start();
+        isset($_SESSION['admin_id']) and $this->redirect('Admin/Index/index');
         $this->display('login');
     }
 
@@ -57,7 +56,11 @@ class PublicController extends Controller {
         } else {
             isset($_COOKIE['PHPSESSID']) and setcookie('PHPSESSID', $_COOKIE['PHPSESSID'], 0 , '/');
         }
-        F('menu', null);//清空缓存
+
+	    //登录时清空缓存
+	    $menuModel = new MenuModel();
+	    $menuModel->flushMenuCache($res['role_id']);
+
         session_start();
         $_SESSION = array(
             'admin_id' => $id,
@@ -70,7 +73,7 @@ class PublicController extends Controller {
             'last_ip' => get_client_ip(),
             'last_time' => date('Y-m-d H:i:s'),
         );
-        $model->where("admin_id=$id")->save($data);
+        $model->where(array('admin_id' => $id))->save($data);
         $this->success('登录成功', U('Admin/Index/index'));
     }
 

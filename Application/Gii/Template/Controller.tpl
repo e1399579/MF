@@ -1,11 +1,17 @@
 namespace <?php echo $moduleName;?>\Controller;
 use Admin\Controller\AuthController;
-class <?php echo $tn;?>Controller extends AuthController {
+
+class <?php echo $controllerName;?> extends AuthController {
 	public function index() {
 		$model = D('<?php echo $tn;?>');
 		$data = $model->search();
 		$this->assign($data);
-		$menu = M('Menu')->where('module="'.MODULE_NAME.'" AND controller="'.CONTROLLER_NAME.'" AND action="'.ACTION_NAME.'"')->order('menu_id DESC')->find();
+		$map = array(
+			'module' => MODULE_NAME,
+			'controller' => CONTROLLER_NAME,
+			'action' => ACTION_NAME,
+		);
+		$menu = M('Menu')->where($map)->order('menu_id DESC')->find();
 		$this->assign('menu', $menu);
 		$this->display();
 	}
@@ -24,8 +30,8 @@ class <?php echo $tn;?>Controller extends AuthController {
 		$model = D('<?php echo $tn;?>');
 		if ($model->create()) {
 			if ($model->add()) {
-				$this->success('添加成功',U('index'));
-				die;
+				$this->success('添加成功', U('index'));
+				return;
 			} else {
 				$this->error('添加失败');
 			}
@@ -38,24 +44,24 @@ class <?php echo $tn;?>Controller extends AuthController {
 		$model = D('<?php echo $tn;?>');
 		$model->delete($id);
 		$this->success('删除成功!');
-		die;
+		return;
 	}
 	
 	public function bdel(){
 		$delid = I('post.delid');
 		if ($delid) {
-			$did = implode(',',$delid);
+			$did = implode(',', $delid);
 			$model = D('<?php echo $tn;?>');
 			$model->delete($did);
 		}
 		$this->success('删除成功！');
-		exit;
+		return;
 	}
 	
 	public function save($id){
 		$model = M('<?php echo $tn;?>');
 		$info = $model->find($id);
-		$this->assign('info',$info);
+		$this->assign('info', $info);
 		$this->display();
 	}
 	
@@ -63,8 +69,8 @@ class <?php echo $tn;?>Controller extends AuthController {
 		$model = D('<?php echo $tn;?>');
 		if ($model->create()) {
 			if ($model->save() !== false) {
-				$this->success('修改成功',U('index'));
-				die;
+				$this->success('修改成功', U('index'));
+				return;
 			} else {
 				$this->error('修改失败');
 			}

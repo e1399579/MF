@@ -1,21 +1,13 @@
 <?php
 namespace Admin\Controller;
+use Admin\Model\MenuModel;
+
 class IndexController extends AuthController {
     public function index(){
         //缓存，区分角色，避免影响其他用户
         $role_id = $_SESSION['role_id'];
-        $key = 'menu' . $role_id;
-        $menu = F($key);
-        if (empty($menu)) {
-            $model = D('Menu');
-            if ($role_id == 1) {//管理员显示全部菜单
-                $menu = $model->getTreeByMenuId('*');
-            } else {
-                $ids = M('Role')->where("role_id=$role_id")->getField('menu_id_list');
-                $menu = $model->getTreeByMenuId($ids);
-            }
-            F($key, $menu);
-        }
+        $model = new MenuModel();
+	    $menu = $model->getMenuByRoleId($role_id);
 
         $this->assign('menu', $menu);
         $this->display();
@@ -43,6 +35,7 @@ class IndexController extends AuthController {
             '剩余空间' => round((@disk_free_space(".") / (1024 * 1024)), 2) . 'M',
         );
         $this->assign('server_info', $info);
+	    $this->assign('menu', array('name' => '首页'));
         $this->display();
     }
 

@@ -6,7 +6,12 @@ class AdminController extends AuthController {
 		$model = D('Admin');
 		$data = $model->search();
 		$this->assign($data);
-		$menu = M('Menu')->where('module="'.MODULE_NAME.'" AND controller="'.CONTROLLER_NAME.'" AND action="'.ACTION_NAME.'"')->order('menu_id DESC')->find();
+		$map = array(
+			'module' => MODULE_NAME,
+			'controller' => CONTROLLER_NAME,
+			'action' => ACTION_NAME,
+		);
+		$menu = M('Menu')->where($map)->order('menu_id DESC')->find();
 		$this->assign('menu', $menu);
 		$this->display();
 	}

@@ -1,13 +1,18 @@
 <?php
 namespace Admin\Controller;
-use \Admin\Controller\AuthController;
+
 class MenuController extends AuthController {
 	public function index() {
 		$model = D('Menu');
 		$data = $model->search();
 		$this->assign($data);
 		//当前菜单信息
-		$menu = M('Menu')->where('module="'.MODULE_NAME.'" AND controller="'.CONTROLLER_NAME.'" AND action="'.ACTION_NAME.'"')->order('menu_id DESC')->find();
+		$map = array(
+			'module' => MODULE_NAME,
+			'controller' => CONTROLLER_NAME,
+			'action' => ACTION_NAME,
+		);
+		$menu = M('Menu')->where($map)->order('menu_id DESC')->find();
 		$this->assign('menu', $menu);
 		$this->display();
 	}

@@ -12,15 +12,15 @@ class AdminModel extends Model {
 
 	public function search() {
 		$perpage = 10;
-		$where = 1;
+		$where = array();
 		if ($username = I('get.username'))
-			$where .= " AND username LIKE '%{$username}%'";
+			$where['username'] = array('LIKE', "%{$username}%");
     	if ($email = I('get.email'))
-			$where .= " AND email LIKE '%{$email}%'";
+			$where['email'] = array('LIKE', "%{$email}%");
     	if ($role_name = I('get.role_name'))
-			$where .= " AND b.name LIKE '%{$role_name}%'";
+			$where['b.name'] = array('LIKE', "%{$role_name}%");
     	$total = $this->alias('a')->join('__ROLE__ b USING(role_id)', 'LEFT')->where($where)->count();
-		$page = new \Think\Page($total,$perpage);
+		$page = new \Think\Page($total, $perpage);
 		$page->setConfig('first','首页');
 		$page->setConfig('last','尾页');
 		$page->setConfig('prev','上一页');
