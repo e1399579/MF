@@ -10,5 +10,7 @@ return array(
     'DB_PREFIX'             =>  'mf_',    // 数据库表前缀
     /* SESSION设置 */
     'SESSION_AUTO_START'    =>  false,    // 是否自动开启Session
+
+	//'MODULE_ALLOW_LIST'    =>    array('Home','Admin','Gii'),// 允许访问的模块列表，简化URL
 );
 ?>

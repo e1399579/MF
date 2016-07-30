@@ -1,47 +1,47 @@
-<form enctype="multipart/form-data" method="post" class="form-inline" action="__SELF__" id="form-save">
+<form enctype="multipart/form-data" method="post" class="form-inline" action="{:U('savePost')}" id="form-save">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<h4 class="modal-title" id="myModalLabel">修改音乐</h4>
 	</div>
 	<div class="modal-body">
-		<input type='hidden' name="music_id" value="<?php echo $info['music_id'];?>" />
+		<input type='hidden' name="music_id" value="<?php echo $info['music_id'];?>" data-value="<?php echo $info['music_id'];?>" />
 		<div style="padding:20px 20px 0 20px;">
 			<table>
 				<tr style="margin-bottom:10px;display:block;">
 					<td width="90">标题：</td>
-					<td><input type="text" class="form-control" placeholder="标题" name="title" value="<?php echo $info['title'];?>" maxlength="30" /><span class="text-info">*</span></td>
+					<td><input type="text" class="form-control" placeholder="标题" name="title" value="<?php echo $info['title'];?>" data-value="<?php echo $info['title'];?>" maxlength="30" /><span class="text-info">*</span></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">艺术家：</td>
-					<td><input type="text" class="form-control" placeholder="艺术家" name="artist" value="<?php echo $info['artist'];?>" maxlength="30" /><span class="text-info">*</span></td>
+					<td><input type="text" class="form-control" placeholder="艺术家" name="artist" value="<?php echo $info['artist'];?>" data-value="<?php echo $info['artist'];?>" maxlength="30" /><span class="text-info">*</span></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">文件路径：</td>
 					<td>
-						<input type="file" class="btn btn-info" placeholder="文件路径" name="path" />
+						<input type="file" class="btn btn-info" placeholder="文件路径" name="path" data-value="<?php echo $info['path'];?>" />
 						<audio controls="controls" src="<?php echo $info['path'];?>"></audio>
 					</td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">专辑：</td>
-					<td><input type="text" class="form-control" placeholder="专辑" name="album" value="<?php echo $info['album'];?>" maxlength="30" /></td>
+					<td><input type="text" class="form-control" placeholder="专辑" name="album" value="<?php echo $info['album'];?>" data-value="<?php echo $info['album'];?>" maxlength="30" /></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">发行年份：</td>
-					<td><input type="text" class="form-control" placeholder="发行年份" name="publish_time" value="<?php echo $info['publish_time'];?>" /></td>
+					<td><input type="text" class="form-control" placeholder="发行年份" name="publish_time" value="<?php echo $info['publish_time'];?>" data-value="<?php echo $info['publish_time'];?>" /></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">封面：</td>
 					<td>
-						<input type="file" class="btn btn-info" name="cover" />
+						<input type="file" class="btn btn-info" name="cover" data-value="<?php echo $info['cover'];?>" />
 						<?php if(!empty($info['cover'])) echo '<img src="', $info['cover'], '" style="width:50%" />';?>
 					</td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">排序：</td>
-					<td><input type="text" class="form-control" placeholder="排序" name="list_order" value="<?php echo $info['list_order'];?>" /></td>
+					<td><input type="text" class="form-control" placeholder="排序" name="list_order" value="<?php echo $info['list_order'];?>" data-value="<?php echo $info['list_order'];?>" /></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">状态：</td>
-					<td><select name="status"><option value="1"<?php echo '1'==$info['status']?' selected="selected"':'';?>>启用</option><option value="0"<?php echo '0'==$info['status']?' selected="selected"':'';?>>禁用</option></select></td>
+					<td><select name="status" data-value="<?php echo $info['status'];?>"><option value="1"<?php echo '1'==$info['status']?' selected="selected"':'';?>>启用</option><option value="0"<?php echo '0'==$info['status']?' selected="selected"':'';?>>禁用</option></select></td>
 					</tr>			</table>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<input type="button" class="btn btn-primary" onclick="save()" value="确定" />
+		<input type="button" class="btn btn-primary" onclick="save(this.form)" value="确定" />
 		<input type="reset" class="btn btn-warning" value=" 重置 " />
 		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 	</div>

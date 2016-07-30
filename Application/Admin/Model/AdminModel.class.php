@@ -4,9 +4,10 @@ use Think\Model;
 class AdminModel extends Model {
 	protected $_validate = array(
 		array('username','require','用户名不能为空'),
-	array('password','require','密码不能为空'),
-	array('register_time','require','注册时间不能为空'),
-	array('role_id','require','角色ID不能为空'),
+		array('username','','用户名已经存在', self::MUST_VALIDATE, 'unique'),
+		array('password','require','密码不能为空'),
+		array('register_time','require','注册时间不能为空'),
+		array('role_id','require','角色ID不能为空'),
 	);
 
 	public function search() {

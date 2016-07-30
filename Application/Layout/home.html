@@ -1,20 +1,27 @@
+<!--主页模块模板布局-->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>{$title}</title>
-    <link href="__PUBLIC__/css/bootstrap.css" type="text/css" rel="stylesheet">
+    <link href="__PUBLIC__/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="__PUBLIC__/css/bootstrap-theme.css" type="text/css" rel="stylesheet">
     <link href="__PUBLIC__/css/font-awesome.min.css" type="text/css" rel="stylesheet">
     <link href="__PUBLIC__/Home/css/index.css" type="text/css" rel="stylesheet">
-    <foreach name="css" item="vo"><link href="__PUBLIC__/Home/css/{$vo}" type="text/css" rel="stylesheet"></foreach>
-    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/js/bootstrap.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/Home/js/index.js"></script>
-    <foreach name="js" item="vo"><script type="text/javascript" src="__PUBLIC__/Home/js/{$vo}"></script></foreach>
+    <foreach name="css" item="vo">
+	    <link href="__PUBLIC__/Home/css/{$vo}" type="text/css" rel="stylesheet">
+    </foreach>
 </head>
 <body>
+
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/js/index.js"></script>
+<foreach name="js" item="vo">
+	<script type="text/javascript" src="__PUBLIC__/Home/js/{$vo}"></script>
+</foreach>
+
 <header role="banner" id="top" class="navbar navbar-static-top bs-docs-nav bg-info">
     <div class="container">
         <div class="navbar-header">
@@ -46,7 +53,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="icon-pause" id="player-btn"></a></li>
+                <li><a href="javascript:void(0);"><i class="fa fa-pause" id="player-btn"></i></a></li>
                 <li>
                     <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         playlist<span class="caret"></span>

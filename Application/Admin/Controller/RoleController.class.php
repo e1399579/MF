@@ -1,6 +1,6 @@
 <?php
 namespace Admin\Controller;
-use \Admin\Controller\AuthController;
+
 class RoleController extends AuthController {
 	public function index() {
 		$model = D('Role');
@@ -79,15 +79,21 @@ class RoleController extends AuthController {
 		$data = $menu->select();
 		$tree = $menu->getTree($data);
 		$this->assign('tree', $tree);
+
 		$ids = M('Role')->where("role_id=$id")->getField('menu_id_list');
-		$mca = $menu->field('concat(`module`,`controller`,`action`) mca')
-				->where("`menu_id` IN ($ids)")->select();
-		//>5.5用array_column代替
-		$tmp = array();
-		foreach ($mca as $row) {
-			$tmp[] = $row['mca'];
+		if ('*' == $ids) {
+			$mca = array('*');
+		} else {
+			empty($ids) and $ids = '0';
+			$map['menu_id'] = array('IN', $ids);
+			$list = $menu->field(array('module', 'controller', 'action'))->where($map)->select();
+			$mca = array();
+			foreach ($list as $row) {
+				$mca[] = $row['module'] . $row['controller'] . $row['action'];
+			}
 		}
-		$this->assign('mca', $tmp);
+
+		$this->assign('mca', $mca);
 		$this->assign('role_id', $id);
 		$this->display();
 	}
@@ -96,10 +102,15 @@ class RoleController extends AuthController {
 		$model = M('Role');
 		$data['menu_id_list'] = implode(',', I('post.id', array()));
 		$role_id = I('post.role_id', 0);
-		$aff = $model->where('role_id', $role_id)->save($data);
+		$aff = $model->where(array('role_id' => $role_id))->save($data);
 		if ($aff === false) {
 			$this->error('授权失败！');
 		} else {
+			//刷新角色缓存
+			$key = 'menu' . $role_id;
+			$menuModel = D('Menu');
+			$menu = $menuModel->getTreeByMenuId($data['menu_id_list']);
+			F($key, $menu);
 			$this->success('授权成功！');
 		}
 	}

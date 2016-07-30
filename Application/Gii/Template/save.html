@@ -1,4 +1,4 @@
-<form method="post" class="form-horizontal" action="__SELF__" id="form-save">
+<form method="post" class="form-horizontal" action="{:U('savePost')}" id="form-save">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<h4 class="modal-title" id="myModalLabel">修改%COMMENT%</h4>
@@ -7,7 +7,7 @@
 		%TABLE%
 	</div>
 	<div class="modal-footer">
-		<input type="button" class="btn btn-primary" onclick="save()" value="确定" />
+		<input type="button" class="btn btn-primary" onclick="save(this.form)" value="确定" />
 		<input type="reset" class="btn btn-warning" value=" 重置 " />
 		<input type="button" class="btn btn-default" data-dismiss="modal" value="取消">
 	</div>

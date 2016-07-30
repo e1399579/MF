@@ -23,11 +23,11 @@ function Player(audio, container, button, background) {
     this.play = function() {
         if (this.audio.paused) {
             this.audio.play();
-            this.button.prop("class", "icon-pause");
+            this.button.removeClass("fa-play").addClass("fa-pause");
             this.ps();
             return;
         }
-        this.button.prop("class", "icon-play");
+        this.button.removeClass("fa-pause").addClass("fa-play");
         this.audio.pause();
     }
 
@@ -78,7 +78,7 @@ function Player(audio, container, button, background) {
             pl.start(li.attr("data"), li);//选取未播放中随机一个播放
         } else {
             //将按钮变为播放状态
-            pl.button.prop("class", "icon-play");
+            pl.button.removeClass("fa-pause").addClass("fa-play");
         }
     };
 }
@@ -91,4 +91,3 @@ $(function(){
         player.start($(this).attr("data"), $(this));
     });
 });
-

@@ -1,43 +1,43 @@
-<form method="post" class="form-inline" action="__SELF__" id="form-save">
+<form method="post" class="form-inline" action="{:U('savePost')}" id="form-save">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">修改管理员</h4>
     </div>
     <div class="modal-body">
-        <input type='hidden' name="admin_id" value="<?php echo $info['admin_id']; ?>"/>
+        <input type='hidden' name="admin_id" value="<?php echo $info['admin_id']; ?>" data-value="<?php echo $info['admin_id']; ?>" />
 
         <div style="padding:20px 20px 0 20px;">
             <table>
                 <tr style="margin-bottom:10px;display:block;">
                     <td width="90">用户名：</td>
                     <td><input type="text" class="form-control" placeholder="用户名" name="username"
-                               value="<?php echo $info['username']; ?>" maxlength="30"/><span class="text-info">*</span>
+                               value="<?php echo $info['username']; ?>" data-value="<?php echo $info['username']; ?>" maxlength="30"/><span class="text-info">*</span>
                     </td>
                 </tr>
                 <tr style="margin-bottom:10px;display:block;">
                     <td width="90">密码：</td>
-                    <td><input type="password" class="form-control" placeholder="密码" name="password" value="123456"
+                    <td><input type="password" class="form-control" placeholder="密码" name="password" value="123456" data-value=""
                                maxlength="32"/><span class="text-info">*</span></td>
                 </tr>
                 <tr style="margin-bottom:10px;display:block;">
                     <td width="90">邮箱：</td>
                     <td><input type="text" class="form-control" placeholder="邮箱" name="email"
-                               value="<?php echo $info['email']; ?>" maxlength="30"/></td>
+                               value="<?php echo $info['email']; ?>" data-value="<?php echo $info['email']; ?>" maxlength="30"/></td>
                 </tr>
                 <?php if ($info['admin_id'] != 1):?>
                 <tr style="margin-bottom:10px;display:block;">
                     <td width="90">用户状态：</td>
                     <td><input type="radio" name="user_status"
-                               value="启用"<?php echo '启用' == $info['user_status'] ? ' checked="checked"' : ''; ?> />启用<input
+                               value="启用"<?php echo '启用' == $info['user_status'] ? ' checked="checked"' : ''; ?> data-value="<?php echo $info['user_status']; ?>" />启用<input
                             type="radio" name="user_status"
-                            value="禁用"<?php echo '禁用' == $info['user_status'] ? ' checked="checked"' : ''; ?> />禁用
+                            value="禁用"<?php echo '禁用' == $info['user_status'] ? ' checked="checked"' : ''; ?> data-value="<?php echo $info['user_status']; ?>" />禁用
                     </td>
                 </tr>
                 <tr style="margin-bottom:10px;display:block;">
                     <td width="90">角色：</td>
                     <td>
-                        <select class="form-control" name="role_id">
+                        <select class="form-control" name="role_id" data-value="<?php echo $info['role_id']; ?>">
                             <?php foreach ($role as $id=>$name):?>
                             <option value="<?php echo $id;?>"<?php echo $info['role_id']==$id?' selected="selected"':'';?>><?php echo $name;?></option>
                             <?php endforeach;?>
@@ -50,7 +50,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <input type="button" class="btn btn-primary" onclick="save()" value="确定"/>
+        <input type="button" class="btn btn-primary" onclick="save(this.form)" value="确定"/>
         <input type="reset" class="btn btn-warning" value=" 重置 "/>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
     </div>

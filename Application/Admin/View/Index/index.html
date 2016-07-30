@@ -1,207 +1,560 @@
+<!--后台主题框架-->
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
-  <!-- Title and other stuffs -->
-  <title>后台管理系统</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-  <meta name="author" content="">
-  <!-- Stylesheets -->
-  <link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
-  <!-- Font awesome icon -->
-  <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.css">
-  <!-- Main stylesheet -->
-  <link href="__PUBLIC__/Admin/css/style.css" rel="stylesheet">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+	<title>H+ 后台主题UI框架 - 主页</title>
+
+	<!--[if lt IE 8]>
+	<meta http-equiv="refresh" content="0;ie.html"/>
+	<![endif]-->
+
+	<link rel="shortcut icon" href="__PUBLIC__/H+/favicon.ico">
+	<link href="__PUBLIC__/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="__PUBLIC__/css/font-awesome.min.css" rel="stylesheet">
+	<link href="__PUBLIC__/H+/css/animate.min.css" rel="stylesheet">
+	<link href="__PUBLIC__/H+/css/style.min.css?v=4.1.0" rel="stylesheet">
+	<style type="text/css">
+		.avatar {
+			width: 64px;
+			height: 64px;
+		}
+	</style>
 </head>
 
-<body>
-<!-- Header starts -->
-  <header id="header">
-    <div class="container-full">
-      <div class="row" style="margin: 0;">
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+<div id="wrapper">
+	<!--左侧导航开始-->
+	<nav class="navbar-default navbar-static-side" role="navigation">
+		<div class="nav-close">
+			<i class="fa fa-times-circle"></i>
+		</div>
+		<div class="sidebar-collapse">
+			<ul class="nav" id="side-menu">
+				<li class="nav-header">
+					<div class="dropdown profile-element">
+						<span class="" id="admin-avatar">
+							<?php if (!empty($_SESSION['avatar'])): ?>
+								<img alt="image" class="img-circle avatar"
+								     src="__ROOT__<?php echo $_SESSION['avatar']; ?>"/>
+							<?php else: ?>
+								<i class="fa fa-user fa-4x"></i>
+							<?php endif; ?>
+						</span>
 
-        <!-- Logo section -->
-        <div class="col-md-3 col-sm-0 col-xs-0">
-          <!-- Logo. -->
-           <div class="logo">
-            <h1><a href="#">MF<span class="bold"></span></a></h1>
-            <p class="meta">后台管理系统</p>
-          </div>
-          <!-- Logo ends -->
-        </div>
+						<a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                               <span class="block m-t-xs"><strong
+		                               class="font-bold"><?php echo $_SESSION['username']; ?></strong></span>
+                                <span class="text-muted text-xs block"><?php echo $_SESSION['role_name']; ?><b
+		                                class="caret"></b></span>
+                                </span>
+						</a>
+						<ul class="dropdown-menu animated fadeInRight m-t-xs">
+							<li>
+								<a class="" href="{:U('Admin/avatar')}" data-toggle="modal"
+								   data-target="#avatar">修改头像</a>
+							</li>
+							<li>
+								<a href="__MODULE__/Admin/show/id/<?php echo $_SESSION['admin_id']; ?>"
+								   data-toggle="modal" data-target="#adminInfo">查看资料</a>
+							</li>
+							<!--<li>
+								<a class="J_menuItem" href="#">信箱</a>
+							</li>-->
+							<li class="divider"></li>
+							<li>
+								<a href="{:U('Admin/Public/logout')}">安全退出</a>
+							</li>
+						</ul>
+					</div>
+					<div class="logo-element">H+
+					</div>
+				</li>
+				<li>
+					<a class="J_menuItem" href="{:U('main')}">
+						<i class="fa fa-home"></i>
+						<span class="nav-label">主页</span>
+					</a>
+				</li>
 
-        <!-- Button section -->
-        <div class="col-md-3 col-sm-3 col-xs-3">
+				<?php foreach ($menu as $key => $row):
+					if (empty($row['child'])):
+						?>
+						<li>
+							<a class="J_menuItem"
+							   href="<?php echo U($row['module'] . '/' . $row['controller'] . '/' . $row['action']); ?>"><i
+									class="fa <?php echo $row['icon'] ? $row['icon'] : 'fa-list'; ?>"></i> <span
+									class="nav-label"><?php echo $row['name']; ?></span></a>
+						</li>
+					<?php else: ?>
+						<li>
+							<a href="#">
+								<i class="fa <?php echo $row['icon'] ? $row['icon'] : 'fa-list'; ?>"></i>
+								<span class="nav-label"><?php echo $row['name']; ?></span>
+								<span class="fa arrow"></span>
+							</a>
+							<ul class="nav nav-second-level">
+								<?php foreach ($row['child'] as $row2): ?>
+									<li>
+										<a class="J_menuItem"
+										   href="<?php echo U($row['module'] . '/' . $row['controller'] . '/' . $row['action']); ?>"><?php echo $row2['name']; ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						</li>
+					<?php endif;endforeach; ?>
 
-          <!-- Buttons -->
-          <ul class="nav nav-pills">
+			</ul>
+		</div>
+	</nav>
+	<!--左侧导航结束-->
+	<!--右侧部分开始-->
+	<div id="page-wrapper" class="gray-bg dashbard-1">
+		<div class="row border-bottom">
+			<nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0;">
+				<div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="javascript:void(0);"><i
+							class="fa fa-bars"></i> </a>
+					<form role="search" class="navbar-form-custom" method="post" action="search_results.html">
+						<div class="form-group">
+							<input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search"
+							       id="top-search">
+						</div>
+					</form>
+				</div>
+				<ul class="nav navbar-top-links navbar-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+							<i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
+						</a>
+						<ul class="dropdown-menu dropdown-messages">
+							<li class="m-t-xs">
+								<div class="dropdown-messages-box">
+									<a href="profile.html" class="pull-left">
+										<img alt="image" class="img-circle" src="__PUBLIC__/H+/img/a7.jpg">
+									</a>
+									<div class="media-body">
+										<small class="pull-right">46小时前</small>
+										<strong>小四</strong> 这个在日本投降书上签字的军官，建国后一定是个不小的干部吧？
+										<br>
+										<small class="text-muted">3天前 2014.11.8</small>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="dropdown-messages-box">
+									<a href="profile.html" class="pull-left">
+										<img alt="image" class="img-circle" src="__PUBLIC__/H+/img/a4.jpg">
+									</a>
+									<div class="media-body ">
+										<small class="pull-right text-navy">25小时前</small>
+										<strong>国民岳父</strong> 如何看待“男子不满自己爱犬被称为狗，刺伤路人”？——这人比犬还凶
+										<br>
+										<small class="text-muted">昨天</small>
+									</div>
+								</div>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="text-center link-block">
+									<a class="J_menuItem" href="mailbox.html">
+										<i class="fa fa-envelope"></i> <strong> 查看所有消息</strong>
+									</a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+							<i class="fa fa-bell"></i> <span class="label label-primary">8</span>
+						</a>
+						<ul class="dropdown-menu dropdown-alerts">
+							<li>
+								<a href="mailbox.html">
+									<div>
+										<i class="fa fa-envelope fa-fw"></i> 您有16条未读消息
+										<span class="pull-right text-muted small">4分钟前</span>
+									</div>
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a href="profile.html">
+									<div>
+										<i class="fa fa-qq fa-fw"></i> 3条新回复
+										<span class="pull-right text-muted small">12分钟钱</span>
+									</div>
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<div class="text-center link-block">
+									<a class="J_menuItem" href="notifications.html">
+										<strong>查看所有 </strong>
+										<i class="fa fa-angle-right"></i>
+									</a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown hidden-xs">
+						<a class="right-sidebar-toggle" aria-expanded="false">
+							<i class="fa fa-tasks"></i> 主题
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="row content-tabs">
+			<button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
+			</button>
+			<nav class="page-tabs J_menuTabs">
+				<div class="page-tabs-content">
+					<a href="javascript:;" class="active J_menuTab" data-id="{:U('main')}">首页</a>
+				</div>
+			</nav>
+			<button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
+			</button>
+			<div class="btn-group roll-nav roll-right">
+				<button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
 
-            <!-- Comment button with number of latest comments count -->
-            <li class="dropdown dropdown-big">
-              <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                <i class="icon-comments"></i> Chats <span   class="label label-info">1</span>
-              </a>
+				</button>
+				<ul role="menu" class="dropdown-menu dropdown-menu-right">
+					<li class="J_tabShowActive"><a>定位当前选项卡</a>
+					</li>
+					<li class="divider"></li>
+					<li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+					</li>
+					<li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+					</li>
+				</ul>
+			</div>
+			<a href="{:U('Admin/Public/logout')}" class="roll-nav roll-right J_tabExit"><i
+					class="fa fa fa-sign-out"></i> 退出</a>
+		</div>
+		<div class="row J_mainContent" id="content-main">
+			<iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="{:U('main')}" frameborder="0"
+			        data-id="{:U('main')}" seamless></iframe>
+		</div>
+		<div class="footer">
+			<div class="pull-right">&copy; 2014-2015 <a href="http://www.zi-han.net/" target="_blank">zihan's blog</a>
+			</div>
+		</div>
+	</div>
+	<!--右侧部分结束-->
+	<!--右侧边栏开始-->
+	<div id="right-sidebar">
+		<div class="sidebar-container">
 
-                <ul class="dropdown-menu">
-                  <li>
-                    <!-- Heading - h5 -->
-                    <h5><i class="icon-comments"></i> Chats</h5>
-                    <!-- Use hr tag to add border -->
-                    <hr />
-                  </li>
-                  <li>
-                    <!-- List item heading h6 -->
-                    <h6><a href="#">Hi :)</a> <span class="label label-warning pull-right">10:42</span></h6>
-                    <div class="clearfix"></div>
-                    <hr />
-                  </li>
-                  <li>
-                    <div class="drop-foot">
-                      <a href="#">View All</a>
-                    </div>
-                  </li>                                    
-                </ul>
-            </li>
-          </ul>
+			<ul class="nav nav-tabs navs-3">
 
-        </div>
+				<li class="active">
+					<a data-toggle="tab" href="#tab-1">
+						<i class="fa fa-gear"></i> 主题
+					</a>
+				</li>
+				<li class=""><a data-toggle="tab" href="#tab-2">
+						通知
+					</a>
+				</li>
+				<li><a data-toggle="tab" href="#tab-3">
+						项目进度
+					</a>
+				</li>
+			</ul>
 
-        <!-- Data section -->
+			<div class="tab-content">
+				<div id="tab-1" class="tab-pane active">
+					<div class="sidebar-title">
+						<h3><i class="fa fa-comments-o"></i> 主题设置</h3>
+						<small><i class="fa fa-tim"></i> 你可以从这里选择和预览主题的布局和样式，这些设置会被保存在本地，下次打开的时候会直接应用这些设置。</small>
+					</div>
+					<div class="skin-setttings">
+						<div class="title">主题设置</div>
+						<div class="setings-item">
+							<span>收起左侧菜单</span>
+							<div class="switch">
+								<div class="onoffswitch">
+									<input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox"
+									       id="collapsemenu">
+									<label class="onoffswitch-label" for="collapsemenu">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="setings-item">
+							<span>固定顶部</span>
 
-        <div class="col-md-5 col-sm-7 col-xs-7">
-          <div class="header-data">
+							<div class="switch">
+								<div class="onoffswitch">
+									<input type="checkbox" name="fixednavbar" class="onoffswitch-checkbox"
+									       id="fixednavbar">
+									<label class="onoffswitch-label" for="fixednavbar">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="setings-item">
+                                <span>
+                        固定宽度
+                    </span>
 
-            <!-- Traffic data -->
-            <div class="hdata">
-              <div class="mcol-left">
-                <!-- Icon with red background -->
-                <i class="icon-signal bred"></i> 
-              </div>
-              <div class="mcol-right">
-                <!-- Number of visitors -->
-                <p><a href="#">0</a> <em>访问</em></p>
-              </div>
-              <div class="clearfix"></div>
-            </div>
+							<div class="switch">
+								<div class="onoffswitch">
+									<input type="checkbox" name="boxedlayout" class="onoffswitch-checkbox"
+									       id="boxedlayout">
+									<label class="onoffswitch-label" for="boxedlayout">
+										<span class="onoffswitch-inner"></span>
+										<span class="onoffswitch-switch"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="title">皮肤选择</div>
+						<div class="setings-item default-skin nb">
+                                <span class="skin-name ">
+                         <a href="#" class="s-skin-0">
+                             默认皮肤
+                         </a>
+                    </span>
+						</div>
+						<div class="setings-item blue-skin nb">
+                                <span class="skin-name ">
+                        <a href="#" class="s-skin-1">
+                            蓝色主题
+                        </a>
+                    </span>
+						</div>
+						<div class="setings-item yellow-skin nb">
+                                <span class="skin-name ">
+                        <a href="#" class="s-skin-3">
+                            黄色/紫色主题
+                        </a>
+                    </span>
+						</div>
+					</div>
+				</div>
+				<div id="tab-2" class="tab-pane">
 
-            <!-- Members data -->
-            <div class="hdata">
-              <div class="mcol-left">
-                <!-- Icon with blue background -->
-                <i class="icon-user bblue"></i> 
-              </div>
-              <div class="mcol-right">
-                <!-- Number of visitors -->
-                <p><a href="#">0</a> <em>用户</em></p>
-              </div>
-              <div class="clearfix"></div>
-            </div>
+					<div class="sidebar-title">
+						<h3><i class="fa fa-comments-o"></i> 最新通知</h3>
+						<small><i class="fa fa-tim"></i> 您当前有10条未读信息</small>
+					</div>
 
-            <!-- revenue data -->
-            <div class="hdata">
-              <div class="mcol-left">
-                <!-- Icon with green background -->
-                <i class="icon-money bgreen"></i> 
-              </div>
-              <div class="mcol-right">
-                <!-- Number of visitors -->
-                <p><a href="#">0</a><em>订单</em></p>
-              </div>
-              <div class="clearfix"></div>
-            </div>                        
+					<div>
 
-          </div>
-        </div>
+						<div class="sidebar-message">
+							<a href="#">
+								<div class="pull-left text-center">
+									<img alt="image" class="img-circle message-avatar" src="__PUBLIC__/H+/img/a1.jpg">
 
-        <!-- Links -->
-        <div class="col-md-1 col-sm-2 col-xs-2">
-        <ul class="nav navbar-nav" style="margin-top:10px;">
-          <li class="dropdown pull-right">            
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-              <i class="icon-user"></i> <?php echo $_SESSION['username'];?> <b class="caret"></b>
-            </a>
-            
-            <!-- Dropdown menu -->
-            <ul class="dropdown-menu">
-              <li><a href="#"><i class="icon-user"></i> 个人配置</a></li>
-              <li><a href="#"><i class="icon-cogs"></i> 站点设置</a></li>
-              <li><a href="{:U('Admin/Public/logout')}"><i class="icon-off"></i> 退出</a></li>
-            </ul>
-          </li>
-          
-        </ul>
-        </div>
-    </div>
-  </header>
+									<div class="m-t-xs">
+										<i class="fa fa-star text-warning"></i>
+										<i class="fa fa-star text-warning"></i>
+									</div>
+								</div>
+								<div class="media-body">
 
-<!-- Header ends -->
+									据天津日报报道：瑞海公司董事长于学伟，副董事长董社轩等10人在13日上午已被控制。
+									<br>
+									<small class="text-muted">今天 4:21</small>
+								</div>
+							</a>
+						</div>
+						<div class="sidebar-message">
+							<a href="#">
+								<div class="pull-left text-center">
+									<img alt="image" class="img-circle message-avatar" src="__PUBLIC__/H+/img/a2.jpg">
+								</div>
+								<div class="media-body">
+									HCY48之音乐大魔王会员专属皮肤已上线，快来一键换装拥有他，宣告你对华晨宇的爱吧！
+									<br>
+									<small class="text-muted">昨天 2:45</small>
+								</div>
+							</a>
+						</div>
 
-<!-- Main content starts -->
+					</div>
 
-<div class="content row" style="margin: 0;padding: 0;">
+				</div>
+				<div id="tab-3" class="tab-pane">
 
-  	<!-- Sidebar -->
-    <div class="sidebar col-lg-2 col-md-2 col-sm-0 col-xs-0">
-        <div class="sidebar-dropdown btn-info"><a href="#">管理菜单</a></div>
+					<div class="sidebar-title">
+						<h3><i class="fa fa-cube"></i> 最新任务</h3>
+						<small><i class="fa fa-tim"></i> 您当前有14个任务，10个已完成</small>
+					</div>
 
-        <!--- Sidebar navigation -->
-        <!-- If the main navigation has sub navigation, then add the class "has_sub" to "li" of main navigation. -->
-        <ul id="nav">
-          <!--<li class="has_sub"><a href="#"><i class="icon-file-alt"></i> Pages #1  <span class="pull-right"><i class="icon-chevron-right"></i></span></a>
-            <ul>
-              <li><a href="main.html">Post</a></li>
-              <li><a href="login.html">Login</a></li>
-            </ul>
-          </li>
-          <li><a href="{:U('main')}" class="open"><i class="icon-table"></i> Tables</a></li>-->
-          <?php foreach ($menu as $key => $row):
-            if(empty($row['child'])):
-            ?><li><a href="<?php echo U($row['module'].'/'.$row['controller'].'/'.$row['action']);?>"><i class="<?php echo $row['icon']?$row['icon']:'icon-list';?>"></i> <?php echo $row['name'];?></a></li>
-            <?php else:?><li class="has_sub"><a href="#"><i class="<?php echo $row['icon']?$row['icon']:'icon-list';?>"></i> <?php echo $row['name'];?><span class="pull-right"><i class="icon-chevron-right"></i></span></a>
-              <ul><?php foreach ($row['child'] as $row2):?>
-                <li><a href="<?php echo U($row['module'].'/'.$row['controller'].'/'.$row['action']);?>"><?php echo $row2['name'];?></a></li>
-                <?php endforeach;?>
-              </ul>
-            </li>
-          <?php endif;endforeach;?>
-        </ul>
-    </div>
+					<ul class="sidebar-list">
+						<li>
+							<a href="#">
+								<div class="small pull-right m-t-xs">9小时以后</div>
+								<h4>市场调研</h4> 按要求接收教材；
 
-    <!-- Sidebar ends -->
-    <!--大屏幕、中等屏幕 、小屏幕：2/10，超小屏幕：0/12-->
-  	<iframe class="col-lg-10 col-md-10 col-sm-12 col-xs-12" src="{:U('main')}" style="padding:0;min-height:800px;" frameborder="0" id="frame"></iframe>
+								<div class="small">已完成： 22%</div>
+								<div class="progress progress-mini">
+									<div style="width: 22%;" class="progress-bar progress-bar-warning"></div>
+								</div>
+								<div class="small text-muted m-t-xs">项目截止： 4:00 - 2015.10.01</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<div class="small pull-right m-t-xs">9小时以后</div>
+								<h4>可行性报告研究报上级批准 </h4> 编写目的编写本项目进度报告的目的在于更好的控制软件开发的时间,对团队成员的 开发进度作出一个合理的比对
 
-   <!-- Mainbar ends -->	    	
-   <div class="clearfix"></div>
+								<div class="small">已完成： 48%</div>
+								<div class="progress progress-mini">
+									<div style="width: 48%;" class="progress-bar"></div>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="label label-primary pull-right">NEW</span>
+								<h4>设计阶段</h4>
+								<!--<div class="small pull-right m-t-xs">9小时以后</div>-->
+								项目进度报告(Project Progress Report)
+								<div class="small">已完成： 22%</div>
+								<div class="small text-muted m-t-xs">项目截止： 4:00 - 2015.10.01</div>
+							</a>
+						</li>
 
+					</ul>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!--右侧边栏结束-->
+	<!--mini聊天窗口开始-->
+	<div class="small-chat-box fadeInRight animated">
+
+		<div class="heading" draggable="true">
+			<small class="chat-date pull-right">
+				2015.9.1
+			</small>
+			与 Beau-zihan 聊天中
+		</div>
+
+		<div class="content">
+
+			<div class="left">
+				<div class="author-name">
+					Beau-zihan
+					<small class="chat-date">
+						10:02
+					</small>
+				</div>
+				<div class="chat-message active">
+					你好
+				</div>
+
+			</div>
+			<div class="right">
+				<div class="author-name">
+					游客
+					<small class="chat-date">
+						11:24
+					</small>
+				</div>
+				<div class="chat-message">
+					你好，请问H+有帮助文档吗？
+				</div>
+			</div>
+			<div class="left">
+				<div class="author-name">
+					Beau-zihan
+					<small class="chat-date">
+						08:45
+					</small>
+				</div>
+				<div class="chat-message active">
+					有，购买的H+源码包中有帮助文档，位于docs文件夹下
+				</div>
+			</div>
+
+		</div>
+		<div class="form-chat">
+			<div class="input-group input-group-sm">
+				<input type="text" class="form-control"> <span class="input-group-btn"> <button
+						class="btn btn-primary" type="button">发送
+                </button> </span>
+			</div>
+		</div>
+
+	</div>
+	<div id="small-chat">
+		<span class="badge badge-warning pull-right">1</span>
+		<a class="open-small-chat">
+			<i class="fa fa-comments"></i>
+		</a>
+	</div>
 </div>
-<!-- Content ends -->
 
-<!-- Footer starts -->
-<footer>
-  <div class="container-full">
-    <div class="row" style="margin: 0;">
-      <div class="col-md-12">
-            <!-- Copyright info -->
-            <p class="copy">Copyright &copy; 2015 | <a href="{:U('/')}" target="_blank">我的网站</a> </p>
-      </div>
-    </div>
-  </div>
-</footer> 	
+<div class="modal fade" id="avatar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content"></div>
+	</div>
+</div>
+<div class="modal fade" id="adminInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content"></div>
+	</div>
+</div>
 
-<!-- Footer ends -->
-
-<!-- Scroll to top -->
-<span class="totop"><a href="#"><i class="icon-chevron-up"></i></a></span> 
-
-<!-- JS -->
-<script src="__PUBLIC__/js/jquery.js"></script> <!-- jQuery -->
-<script src="__PUBLIC__/js/bootstrap.js"></script> <!-- Bootstrap -->
-<script src="__PUBLIC__/Admin/js/custom.js"></script> <!-- Custom codes -->
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/H+/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="__PUBLIC__/H+/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/H+/js/plugins/layer/layer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/H+/js/hplus.min.js?v=4.1.0"></script>
+<script type="text/javascript" src="__PUBLIC__/H+/js/contabs.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/H+/js/plugins/pace/pace.min.js"></script>
 <script type="text/javascript">
-  //iframe高度
-  $("#frame").height($("#nav").height()+200);
+	//模态框隐藏时移出数据
+	$("#avatar").on("hidden.bs.modal", function () {
+		$(this).removeData("bs.modal");
+	});
+	$("#adminInfo").on("hidden.bs.modal", function () {
+		$(this).removeData("bs.modal");
+	});
+
+	//修改提交
+	function save(form) {
+		$.ajax({
+			type: "post",
+			url: "__MODULE__/Admin/savePost",
+			data: $(form).serialize(),
+			dataType: "json",
+			success: function (data) {
+				if (data.status) {
+					$(form).find(".error-msg").html("");
+					var html = '<div class="alert alert-success" role="alert">' + data.info + '</div>';
+					$(form).append(html);
+					window.setTimeout(function () {
+						$('#adminInfo').modal('toggle');
+					}, 500);
+					getList("#form-search");
+				} else {
+					var html = '<div role="alert" class="alert alert-warning alert-dismissible fade in">';
+					html += '<button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>';
+					html += '<strong>' + data.info + '</strong></div>'
+					$(form).find(".error-msg").html(html);
+				}
+			}
+		});
+	}
 </script>
 </body>
+
 </html>

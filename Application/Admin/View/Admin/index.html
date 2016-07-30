@@ -1,8 +1,8 @@
 <layout name="../../Layout/admin" />
 <!-- Page heading -->
 <div class="page-head">
-    <h2 class="pull-left" id="table-title"><i class="<?php echo $menu['icon'];?>"></i> <?php echo $menu['name'];?></h2>
-    <div class="pull-right" style="cursor: pointer;line-height: 43px;"><i class="icon-fullscreen" onclick="ctrl(this)"></i></div>
+    <h2 class="pull-left" id="table-title"><i class="fa <?php echo $menu['icon'];?>"></i> <?php echo $menu['name'];?></h2>
+    <div class="pull-right" style="cursor: pointer;line-height: 43px;"><i class="fa fa-expand" onclick="ctrl(this)"></i></div>
     <div class="clearfix"></div>
 </div>
 <!-- Page heading ends -->
@@ -27,7 +27,7 @@
                             角色                            <input type="text" placeholder="角色" name="role_name" class="form-control" value="<?php echo I('get.role_name');?>">
                             <button type="submit" class="btn btn-info"  onclick="return search('#form-search')">搜索</button>
 
-                            <a class="btn btn-info pull-right" href="__CONTROLLER__/add" data-toggle="modal" data-target="#myModal"><i class="icon-plus"></i>添加管理员</a>
+                            <a class="btn btn-info pull-right" href="__CONTROLLER__/add" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i>添加管理员</a>
 
                         </form>
 
@@ -64,11 +64,11 @@
                                         <td><?php echo $row['role_name'];?></td>
                                         <td>
                                             <a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/<?php echo $row['admin_id'];?>" data-toggle="modal" data-target="#myModal">
-                                                <i class="icon-pencil"></i>
+                                                <i class="fa fa-pencil"></i>
                                             </a>
                                             <?php if($row['admin_id'] != 1):?>
                                             <button type="button" class="btn btn-xs btn-danger" data-toggle="popover" data-placement="left" data-title="是否删除？" data-html="true" data-content="<button type='button' class='btn btn-danger' onclick='del(this)'>确定</button> <button type='button' class='btn btn-default' onclick='$(this).parent().parent().prev().click()'>取消</button>">
-                                                <a class="a-color" href="__CONTROLLER__/del/id/<?php echo $row['admin_id'];?>"><i class="icon-remove"></i></a>
+                                                <a class="a-color" href="__CONTROLLER__/del/id/<?php echo $row['admin_id'];?>" onclick="return false;"><i class="fa fa-remove"></i></a>
                                             </button>
                                             <?php endif;?>
                                         </td>
@@ -125,12 +125,12 @@
                     html += '<td>'+list[i].register_time+'</td>';
                     html += '<td>'+list[i].user_status+'</td>';
                     html += '<td>'+list[i].role_name+'</td>';
-                    html += '<td><a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/'+list[i].admin_id+'" data-toggle="modal" data-target="#myModal"><i class="icon-pencil"></i></a> ';
+                    html += '<td><a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/'+list[i].admin_id+'" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i></a> ';
                     if (list[i].admin_id != 1)
                         html += '<button type="button" class="btn btn-xs btn-danger" data-toggle="popover" data-placement="left" data-title="是否删除？" data-html="true" '+
                         'data-content="<button type=\'button\' class=\'btn btn-danger\' onclick=\'del(this)\'>确定</button> '+
                         '<button type=\'button\' class=\'btn btn-default\' onclick=\'$(this).parent().parent().prev().click()\'>取消</button>">'+
-                        '<a class="a-color" href="__CONTROLLER__/del/id/'+list[i].admin_id+'"><i class="icon-remove"></i></a></button></td></tr>';
+                        '<a class="a-color" href="__CONTROLLER__/del/id/'+list[i].admin_id+'" onclick="return false;"><i class="fa fa-remove"></i></a></button></td></tr>';
                 }
                 $("#form-list").html(html);
                 var page = data.page;

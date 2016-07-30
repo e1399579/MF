@@ -31,11 +31,22 @@ class PublicController extends Controller {
             $this->error('验证码错误！');
         }
         $model = M('Admin');
-        $id = $model->where("username='$user' OR email='$user'")->getField('admin_id');
-        if (empty($id)) {
+        $user = $model->where("username='$user' OR email='$user'")->getField('admin_id,user_status');
+        if (empty($user)) {
             $this->error('帐号不存在！');
         }
-        $res = $model->field('admin_id,username,role_id')->where("admin_id=$id AND password='$pass' AND user_status='启用'")->find();
+	    if ('禁用' == current($user)) {
+		    $this->error('帐号被禁用，请联系管理员！');
+	    }
+	    
+        $id = key($user);
+	    $map = array(
+		    'admin_id' => $id,
+		    'password' => $pass,
+		    'user_status' => '启用',
+	    );
+        $res = $model->alias('a')->field('admin_id,username,role_id,name,avatar')
+	        ->join('__ROLE__ b USING(`role_id`)', 'LEFT')->where($map)->find();
         if (empty($res)) {
             $this->error('帐号或密码错误！');
         }
@@ -52,6 +63,8 @@ class PublicController extends Controller {
             'admin_id' => $id,
             'username' => $res['username'],
             'role_id' => $res['role_id'],
+            'role_name' => $res['name'],
+            'avatar' => $res['avatar'],
         );
         $data = array(
             'last_ip' => get_client_ip(),

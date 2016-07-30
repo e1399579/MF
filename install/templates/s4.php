@@ -41,7 +41,8 @@ var n=0;
                     $('#dosubmit').attr("disabled",false);
                     $('#dosubmit').removeAttr("disabled");				
                     $('#dosubmit').removeClass("nonext");
-                    setTimeout('gonext()',2000);
+                    $('#loginner').append(msg.msg);
+                    setTimeout('gonext()',3000);
                     return;
                 }
                 if(msg.n){

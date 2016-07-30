@@ -42,6 +42,7 @@ class MenuController extends AuthController {
 	
 	public function del($id) {
 		$model = D('Menu');
+		$model->where(array('parent_id' => $id))->delete();
 		$model->delete($id);
 		$this->success('删除成功!');
 		die;

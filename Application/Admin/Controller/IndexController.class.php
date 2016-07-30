@@ -2,19 +2,19 @@
 namespace Admin\Controller;
 class IndexController extends AuthController {
     public function index(){
-        //缓存
-        $menu = F('menu');
+        //缓存，区分角色，避免影响其他用户
+        $role_id = $_SESSION['role_id'];
+        $key = 'menu' . $role_id;
+        $menu = F($key);
         if (empty($menu)) {
-            $role_id = $_SESSION['role_id'];
+            $model = D('Menu');
             if ($role_id == 1) {//管理员显示全部菜单
-                $menu = $this->getTree(null);
+                $menu = $model->getTreeByMenuId('*');
             } else {
                 $ids = M('Role')->where("role_id=$role_id")->getField('menu_id_list');
-                if ($ids == '*')
-                    $ids = null;
-                $menu = $this->getTree($ids);
+                $menu = $model->getTreeByMenuId($ids);
             }
-            F('menu', $menu);
+            F($key, $menu);
         }
 
         $this->assign('menu', $menu);
@@ -44,21 +44,6 @@ class IndexController extends AuthController {
         );
         $this->assign('server_info', $info);
         $this->display();
-    }
-
-    /**
-     * 无限分类
-     * @param int $pid
-     * @return mixed
-     */
-    public function getTree($ids, $pid=0) {
-        $where = "parent_id=$pid AND is_display='显示'";
-        is_null($ids) or $where .= " AND menu_id IN($ids)";
-        $res = M('Menu')->where($where)->order('list_order ASC')->select();
-        foreach ($res as $key => $row) {
-            $res[$key]['child'] = $this->getTree($ids, $row['menu_id']);
-        }
-        return $res;
     }
 
     public function info() {

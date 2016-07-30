@@ -1,105 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Title and other stuffs -->
-  <title>后台登录</title>
-  <!-- Stylesheets -->
-  <link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
-  <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.css">
-  <link href="__PUBLIC__/Admin/css/style.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>H+ 后台主题UI框架 - 登录</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+    <link href="__PUBLIC__/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/H+/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/H+/css/style.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/H+/css/login.min.css" rel="stylesheet">
+    <!--[if lt IE 8]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <style type="text/css">
+        .form-login input {
+            color: #676a6c;
+        }
+    </style>
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+
 </head>
 
-<body>
-
-<!-- Form area -->
-<div class="admin-form">
-    <!-- Widget starts -->
-    <div class="widget worange">
-      <!-- Widget head -->
-      <div class="widget-head">
-        <i class="icon-lock"></i> 登录 管理中心
-      </div>
-
-      <div class="widget-content">
-        <div class="padd">
-          <!-- Login form -->
-          <form class="form-horizontal" action="{:U('loginPost')}" method="post" id="form-login">
-            <!-- Email -->
-            <div class="form-group">
-              <label class="control-label col-lg-4 col-md-4" for="inputEmail">帐　号</label>
-              <div class="col-lg-8 col-md-8">
-                <input type="text" name="username" class="form-control" id="inputEmail" placeholder="用户名/邮箱">
-              </div>
-            </div>
-            <!-- Password -->
-            <div class="form-group">
-              <label class="control-label col-lg-4 col-md-4" for="inputPassword">密　码</label>
-              <div class="col-lg-8 col-md-8">
-                <input type="password" name="password" class="form-control" id="inputPassword" placeholder="密码">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="control-label col-lg-4 col-md-4" for="inputPassword">验证码</label>
-              <div class="col-lg-4 col-md-4">
-                <input type="text" name="captcha" class="form-control" id="inputPassword" autocomplete="off" placeholder="验证码">
-              </div>
-              <a href="javascript:void(0)"><img class="col-lg-4 col-md-4" src="{:U('captcha')}" title="看不清？点击换一张" onclick="this.src='{:U('captcha')}?'+Math.random()" /></a>
-            </div>
-            <!-- Remember me checkbox and sign in button -->
-            <div class="form-group">
-                <label class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-xs-offset-3">
-                  <input type="checkbox" name="is_auto"> 记住一周
-                </label>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-xs-offset-3">
-                    <button type="submit" class="btn btn-danger" onclick="return login()">登录</button>
-                    <button type="reset" class="btn btn-default">重置</button>
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>[ H+ ]</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4>欢迎使用 <strong>H+ 后台主题UI框架</strong></h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势二</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势三</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势四</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势五</li>
+                    </ul>
+                    <strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>
                 </div>
             </div>
-          </form>
-        </div>
-      </div>
-      <div id="form-msg"></div>
-      <div class="widget-foot">
-          没有帐号？<a href="#">申请帐号</a>
-      </div>
-    </div>
-</div>
+            <label class="col-sm-5">
+                <form method="post" action="{:U('loginPost')}" class="form-login">
+                    <h4 class="no-margins">登录：</h4>
+                    <p class="m-t-md">登录到H+后台主题UI框架</p>
+                    <input type="text" name="username" class="form-control" placeholder="用户名" />
+                    <input type="password" name="password" class="form-control" placeholder="密码" />
+                    <input type="text" name="captcha" id="captcha" class="form-control" autocomplete="off" placeholder="验证码">
+                    <a href="javascript:void(0)">
+                        <img src="{:U('captcha')}" id="captcha-img" style="display: block;margin: 15px 0" title="看不清？点击换一张" onclick="this.src='{:U('captcha')}?'+Math.random()" />
+                    </a>
 
-<!-- JS -->
-<script src="__PUBLIC__/js/jquery.js"></script>
-<script src="__PUBLIC__/js/bootstrap.js"></script>
-<script type="text/javascript">
-  //登录ajax
-  function login() {
-    var post_data = $("#form-login").serialize();
-    $.ajax({
-      "type":"post",
-      "url":"{:U('loginPost')}",
-      "data":post_data,
-      "dataType":"json",
-      success:function(data) {
-        var info = data.info;
-        if (data.status) {
-          var html = '<div class="alert alert-success alert-dismissible" role="alert">';
-          html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-          html += info + '</div>';
-          $("#form-msg").html(html);
-          window.location.href = data.url;
-        } else {
-          var html = '<div class="alert alert-warning alert-dismissible" role="alert">';
-              html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-              html += info + '</div>';
-          $("#form-msg").html(html);
+                    <input type="checkbox" name="is_auto"> 记住一周
+                    <button type="submit" class="btn btn-success btn-block" onclick="return login(this.form)">登录</button>
+                    <div id="form-msg"></div>
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                &copy; 2015 All Rights Reserved. H+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        //登录ajax
+        function login(form) {
+            var post_data = $(form).serialize();
+            $.ajax({
+                "type":"post",
+                "url":"{:U('loginPost')}",
+                "data":post_data,
+                "dataType":"json",
+                success:function(data) {
+                    var info = data.info;
+                    if (data.status) {
+                        var html = '<div class="alert alert-success alert-dismissible" role="alert">';
+                        html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        html += info + '</div>';
+                        $("#form-msg").html(html);
+                        window.location.href = data.url;
+                    } else {
+                        //清除验证码
+                        $("#captcha").val("");
+                        $("#captcha-img").trigger("click");
+                        var html = '<div class="alert alert-warning alert-dismissible" role="alert">';
+                        html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                        html += info + '</div>';
+                        $("#form-msg").html(html);
+                    }
+                }
+            });
+            return false;
         }
-      }
-    });
-    return false;
-  }
-</script>
+    </script>
 </body>
+
 </html>

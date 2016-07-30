@@ -1,8 +1,8 @@
 <layout name="../../Layout/admin" />
 <!-- Page heading -->
 <div class="page-head">
-    <h2 class="pull-left" id="table-title"><i class="<?php echo $menu['icon'];?>"></i> <?php echo $menu['name'];?></h2>
-    <div class="pull-right" style="cursor: pointer;line-height: 43px;"><i class="icon-fullscreen" onclick="ctrl(this)"></i></div>
+    <h2 class="pull-left" id="table-title"><i class="fa <?php echo $menu['icon'];?>"></i> <?php echo $menu['name'];?></h2>
+    <div class="pull-right" style="cursor: pointer;line-height: 43px;"><i class="fa fa-expand" onclick="ctrl(this)"></i></div>
     <div class="clearfix"></div>
 </div>
 <!-- Page heading ends -->
@@ -26,7 +26,7 @@
                             艺术家                            <input type="text" placeholder="艺术家" name="artist" class="form-control" value="<?php echo I('get.artist');?>">
                             <button type="submit" class="btn btn-info"  onclick="return search('#form-search')">搜索</button>
 
-                            <a class="btn btn-info pull-right" href="__CONTROLLER__/add" data-toggle="modal" data-target="#myModal"><i class="icon-plus"></i>添加音乐</a>
+                            <a class="btn btn-info pull-right" href="__CONTROLLER__/add" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i>添加音乐</a>
 
                         </form>
 
@@ -69,10 +69,10 @@
                                         <td><?php echo $row['update_time'];?></td>
                                         <td>
                                             <a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/<?php echo $row['music_id'];?>" data-toggle="modal" data-target="#myModal">
-                                                <i class="icon-pencil"></i>
+                                                <i class="fa fa-pencil"></i>
                                             </a>
                                             <button type="button" class="btn btn-xs btn-danger" data-toggle="popover" data-placement="left" data-title="是否删除？" data-html="true" data-content="<button type='button' class='btn btn-danger' onclick='del(this)'>确定</button> <button type='button' class='btn btn-default' onclick='$(this).parent().parent().prev().click()'>取消</button>">
-                                                <a class="a-color" href="__CONTROLLER__/del/id/<?php echo $row['music_id'];?>"><i class="icon-remove"></i></a>
+                                                <a class="a-color" href="__CONTROLLER__/del/id/<?php echo $row['music_id'];?>" onclick="return false;"><i class="fa fa-remove"></i></a>
                                             </button>
                                         </td>
                                     </tr>
@@ -131,11 +131,11 @@
                     html += '<td>'+list[i].size+'</td>';
                     html += '<td>'+list[i].status+'</td>';
                     html += '<td>'+list[i].update_time+'</td>';
-                                        html += '<td><a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/'+list[i].music_id+'" data-toggle="modal" data-target="#myModal"><i class="icon-pencil"></i></a> ';
+                                        html += '<td><a class="btn btn-xs btn-warning a-color" href="__CONTROLLER__/save/id/'+list[i].music_id+'" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i></a> ';
                     html += '<button type="button" class="btn btn-xs btn-danger" data-toggle="popover" data-placement="left" data-title="是否删除？" data-html="true" '+
                         'data-content="<button type=\'button\' class=\'btn btn-danger\' onclick=\'del(this)\'>确定</button> '+
                         '<button type=\'button\' class=\'btn btn-default\' onclick=\'$(this).parent().parent().prev().click()\'>取消</button>">'+
-                        '<a class="a-color" href="__CONTROLLER__/del/id/'+list[i].music_id+'"><i class="icon-remove"></i></a></button></td></tr>';
+                        '<a class="a-color" href="__CONTROLLER__/del/id/'+list[i].music_id+'" onclick="return false;"><i class="fa fa-remove"></i></a></button></td></tr>';
                 }
                 $("#form-list").html(html);
                 var page = data.page;

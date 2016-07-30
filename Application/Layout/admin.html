@@ -1,50 +1,41 @@
+<!--后台模块模板布局-->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- Title and other stuffs -->
     <title><?php echo $menu['name']; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="">
-    <!-- Stylesheets -->
-    <link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
-    <!-- Font awesome icon -->
-    <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.css">
-    <!-- Main stylesheet -->
+	<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/css/font-awesome.min.css">
     <link rel="stylesheet" href="__PUBLIC__/Admin/css/style.css">
-    <script src="__PUBLIC__/js/jquery.js"></script> <!-- jQuery -->
-    <script src="__PUBLIC__/js/bootstrap.js"></script> <!-- Bootstrap -->
 </head>
 <body>
-<!-- Main bar -->
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap.min.js"></script>
+
+<!--内容部分-->
 <div class="mainbar">
     {__CONTENT__}
 </div>
-<!-- Matter ends -->
-<!-- JS -->
-<script src="__PUBLIC__/Admin/js/custom.js"></script> <!-- Custom codes -->
+
 <script type="text/javascript">
-    //iframe高度
-    var h = $(window.parent.document.getElementById("nav")).height() + 200;
-    (h > 800) || (h = 800);
-    $(".mainbar").height(h);
 
     //全屏切换
     function ctrl(obj) {
-        $(window.parent.document.getElementById("header")).toggle('normal');
-        if (window.screen.width > 960)//小屏幕时，菜单自动隐藏，不用操作
-            $(window.parent.document.getElementById("nav")).toggle('normal');
-        var part_class = "col-lg-10 col-md-10";
-        var full_class = "col-lg-12 col-md-12";
-        if ($(obj).prop('class') == 'icon-fullscreen') {
-            $(obj).prop('class', 'icon-resize-small');
-            //用bootstrap的栅格系统来切换所占比例
-            $(window.parent.document.getElementById("frame")).removeClass(part_class);
-            $(window.parent.document.getElementById("frame")).addClass(full_class);
+        //查找父容器中id=page-wrapper的第一子元素
+        var page_wrapper = $(window.parent.document.getElementById("page-wrapper")).children(":first");
+        page_wrapper.slideToggle("normal");
+        var icon_full = "fa-expand";
+        var icon_small = "fa-compress";
+        if ($(obj).hasClass(icon_full)) {
+            $(obj).removeClass(icon_full).addClass(icon_small);
+            if (!$(window.parent.document.body).hasClass("mini-navbar"))//如果菜单栏已经折叠，则不用触发点击事件
+                page_wrapper.find(".fa-bars").trigger("click");
         } else {
-            $(obj).prop('class', 'icon-fullscreen');
-            $(window.parent.document.getElementById("frame")).removeClass(full_class);
-            $(window.parent.document.getElementById("frame")).addClass(part_class);
+            $(obj).removeClass(icon_small).addClass(icon_full);
+            if ($(window.parent.document.body).hasClass("mini-navbar"))
+                page_wrapper.find(".fa-bars").trigger("click");
         }
     }
 
@@ -76,7 +67,7 @@
             dataType: "json",
             success: function (data) {
                 if (data.status) {
-                    $(form + " .error-msg").html("");
+                    $(form).find(".error-msg").html("");
                     var html = '<div class="alert alert-success" role="alert">' + data.info + '</div>';
                     $(form).append(html);
                     window.setTimeout(function () {
@@ -87,7 +78,7 @@
                     var html = '<div role="alert" class="alert alert-warning alert-dismissible fade in">';
                     html += '<button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>';
                     html += '<strong>' + data.info + '</strong></div>'
-                    $(form + " .error-msg").html(html);
+                    $(form).find(".error-msg").html(html);
                 }
             }
         });
@@ -164,7 +155,7 @@
             },
             success: function (data) {
                 if (data.status) {
-                    $(form + " .error-msg").html("");
+                    $(form).find(".error-msg").html("");
                     var html = '<div class="alert alert-success" role="alert">' + data.info + '</div>';
                     $(form).append(html);
                     window.setTimeout(function () {
@@ -175,7 +166,7 @@
                     var html = '<div role="alert" class="alert alert-warning alert-dismissible fade in">';
                     html += '<button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">×</span></button>';
                     html += '<strong>' + data.info + '</strong></div>'
-                    $(form + " .error-msg").html(html);
+                    $(form).find(".error-msg").html(html);
                     progress.width("0%");
                     progress.text("0%");
                 }
@@ -187,25 +178,95 @@
             processData: false
         });
     }
+    /**
+     * 检查表单是否修改
+     * @param form
+     * @returns {boolean}
+     */
+    function checkUpdate(form) {
+        var str = $(form).serialize();
+        var arr = [];
+        $.each(form, function(i,n){
+            var name = encodeURI(n.name);
+            var value = encodeURI($(n).attr("data-value"));
+            switch (n.type) {
+                case "checkbox":
+                case "radio":
+                    if (n.checked) {
+                        arr.push(name + "=" + value);
+                    }
+                    break;
+                case "submit":
+                case "reset":
+                case "button":
+                    break;
+                case "file":
+                    var filename = n.value;
+                    if (filename) {
+                        arr.push(name + "=" + filename);
+                    }
+                    break;
+                default:
+                    arr.push(name + "=" + value);
+                    break;
+            }
+        });
+        var old = arr.join("&");
+        return str != old;
+    }
 
     //修改提交
-    function save() {
-        $enctype = $("#form-save").prop("enctype");
-        if ($enctype == "multipart/form-data") {
-            ajaxFilePost("__CONTROLLER__/savePost", "#form-save");
+    function save(form) {
+        if (!checkUpdate(form)) {
+            $(form).find(".error-msg").html("");
+            var html = '<div class="alert alert-success" role="alert">' + "未作任何修改" + '</div>';
+            $(form).append(html);
+            window.setTimeout(function () {
+                $('#myModal').modal('toggle');
+            }, 500);
+            return;
+        }
+
+	    var url = $(form).attr("action");//form.action 会被<input name="action">元素覆盖
+        var enctype = $(form).attr("enctype");
+        if (enctype == "multipart/form-data") {
+            ajaxFilePost(url, form);
         } else {
-            ajaxPost("__CONTROLLER__/savePost", "#form-save");
+            ajaxPost(url, form);
         }
     }
     //添加提交
-    function add() {
-        $enctype = $("#form-add").prop("enctype");
-        if ($enctype == "multipart/form-data") {
-            ajaxFilePost("__CONTROLLER__/addPost", "#form-add");
-        } else {
-            ajaxPost("__CONTROLLER__/addPost", "#form-add");
-        }
+    function add(form) {
+	    var url = $(form).attr("action");//form.action 会被<input name="action">元素覆盖
+	    var enctype = $(form).attr("enctype");
+	    if (enctype == "multipart/form-data") {
+		    ajaxFilePost(url, form);
+	    } else {
+		    ajaxPost(url, form);
+	    }
     }
+
+    //收起效果
+    $('.wminimize').click(function(e){
+	    e.preventDefault();
+	    var $wcontent = $(this).parent().parent().next('.widget-content');
+	    if($wcontent.is(':visible'))
+	    {
+		    $(this).children('i').removeClass('icon-chevron-up').addClass('icon-chevron-down');
+	    }
+	    else
+	    {
+		    $(this).children('i').removeClass('icon-chevron-down').addClass('icon-chevron-up');
+	    }
+	    $wcontent.slideToggle(300);
+    });
+
+	//关闭效果
+    $('.wclose').click(function(e){
+	    e.preventDefault();
+	    var $wbox = $(this).parent().parent().parent();
+	    $wbox.hide(100);
+    });
 </script>
 </body>
 </html>

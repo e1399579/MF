@@ -1,16 +1,16 @@
-<form method="post" class="form-inline" action="__SELF__" id="form-save">
+<form method="post" class="form-inline" action="{:U('savePost')}" id="form-save">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<h4 class="modal-title" id="myModalLabel">修改菜单</h4>
 	</div>
 	<div class="modal-body">
-		<input type='hidden' name="menu_id" value="<?php echo $info['menu_id'];?>" />
+		<input type='hidden' name="menu_id" value="<?php echo $info['menu_id'];?>" data-value="<?php echo $info['menu_id'];?>" />
 		<div style="padding:20px 20px 0 20px;">
 			<table>
 				<tr style="margin-bottom:10px;display:block;">
 					<td width="90">上级菜单：</td>
 					<td>
-						<select name="parent_id" class="form-control">
+						<select name="parent_id" class="form-control" data-value="<?php echo $info['parent_id'];?>">
 							<option value="0">一级菜单</option>
 							<?php foreach ($menu as $row):?>
 								<option value="<?php echo $row['menu_id'];?>"<?php echo $row['menu_id']==$info['parent_id']?' selected="selected"':'';?>><?php echo str_repeat('　', $row['deep']),$row['name'];?></option>
@@ -20,30 +20,30 @@
 					</tr>
 				<tr style="margin-bottom:10px;display:block;">
 					<td width="90">模块：</td>
-					<td><input type="text" class="form-control" placeholder="模块" name="module" value="<?php echo $info['module'];?>" maxlength="20" /><span class="text-info">*</span></td>
+					<td><input type="text" class="form-control" placeholder="模块" name="module" value="<?php echo $info['module'];?>" data-value="<?php echo $info['module'];?>" maxlength="20" /><span class="text-info">*</span></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">控制器：</td>
-					<td><input type="text" class="form-control" placeholder="控制器" name="controller" value="<?php echo $info['controller'];?>" maxlength="20" /><span class="text-info">*</span></td>
+					<td><input type="text" class="form-control" placeholder="控制器" name="controller" value="<?php echo $info['controller'];?>" data-value="<?php echo $info['controller'];?>" maxlength="20" /><span class="text-info">*</span></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">方法：</td>
-					<td><input type="text" class="form-control" placeholder="方法" name="action" value="<?php echo $info['action'];?>" maxlength="20" /><span class="text-info">*</span></td>
+					<td><input type="text" class="form-control" placeholder="方法" name="action" value="<?php echo $info['action'];?>" data-value="<?php echo $info['action'];?>" maxlength="20" /><span class="text-info">*</span></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">是否显示：</td>
-					<td><input type="radio" name="is_display" value="显示"<?php echo '显示'==$info['is_display']?' checked="checked"':'';?> />显示<input type="radio" name="is_display" value="隐藏"<?php echo '隐藏'==$info['is_display']?' checked="checked"':'';?> />隐藏</td>
+					<td><input type="radio" name="is_display" value="显示"<?php echo '显示'==$info['is_display']?' checked="checked"':'';?> data-value="<?php echo $info['is_display'];?>" />显示<input type="radio" name="is_display" value="隐藏"<?php echo '隐藏'==$info['is_display']?' checked="checked"':'';?> data-value="<?php echo $info['is_display'];?>" />隐藏</td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">菜单名称：</td>
-					<td><input type="text" class="form-control" placeholder="菜单名称" name="name" value="<?php echo $info['name'];?>" maxlength="50" /><span class="text-info">*</span></td>
+					<td><input type="text" class="form-control" placeholder="菜单名称" name="name" value="<?php echo $info['name'];?>" data-value="<?php echo $info['name'];?>" maxlength="50" /><span class="text-info">*</span></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">菜单图标：</td>
-					<td><input type="text" class="form-control" placeholder="菜单图标" name="icon" value="<?php echo $info['icon'];?>" maxlength="50" /></td>
+					<td><input type="text" class="form-control" placeholder="菜单图标" name="icon" value="<?php echo $info['icon'];?>" data-value="<?php echo $info['icon'];?>" maxlength="50" /></td>
 					</tr><tr style="margin-bottom:10px;display:block;">
 					<td width="90">排序：</td>
-					<td><input type="text" class="form-control" placeholder="排序" name="list_order" value="<?php echo $info['list_order'];?>" /></td>
+					<td><input type="text" class="form-control" placeholder="排序" name="list_order" value="<?php echo $info['list_order'];?>" data-value="<?php echo $info['list_order'];?>" /></td>
 					</tr>			</table>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<input type="button" class="btn btn-primary" onclick="save()" value="确定" />
+		<input type="button" class="btn btn-primary" onclick="save(this.form)" value="确定" />
 		<input type="reset" class="btn btn-warning" value=" 重置 " />
 		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 	</div>

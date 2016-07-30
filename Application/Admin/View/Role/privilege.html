@@ -5,9 +5,10 @@
 	</div>
 	<div class="modal-body">
 		<div style="padding:20px 20px 0 20px;">
+			<input type="checkbox" name="id[]" value="*" data-value="*"<?php echo in_array('*', $mca)?' checked="checked"':'';?> id="all-auth" />所有权限<br />
 			<?php foreach ($tree as $row):?>
 				<?php echo str_repeat('&nbsp;&nbsp;&nbsp;&nbsp;', $row['deep']);?>
-				<input type="checkbox" name="id[]" value="<?php echo $row['menu_id']?>" deep="<?php echo $row['deep'];?>"<?php echo in_array($row['module'].$row['controller'].$row['action'], $mca)?' checked="checked"':'';?>/>
+				<input type="checkbox" name="id[]" value="<?php echo $row['menu_id']?>" data-deep="<?php echo $row['deep'];?>"<?php echo in_array($row['module'].$row['controller'].$row['action'], $mca)?' checked="checked"':'';?>/>
 				<?php echo $row['name'];?><br />
 			<?php endforeach;?>
 			<input type="hidden" name="role_id" value="<?php echo $role_id;?>" />
@@ -21,40 +22,48 @@
 </form>
 <script type="text/javascript">
 	$(":checkbox").click(function(){
-		if ($(this).is(":checked")) {
+		if ($(this).prop("checked")) {
 			var deep,deep2;
-			deep = deep2 = $(this).attr("deep");
+			deep = deep2 = $(this).attr("data-deep");
 			//选中上级
 			$(this).prevAll(":checkbox").each(function(i, n){
-				if ($(n).attr('deep') < deep) {
+				if ($(n).attr('data-deep') < deep) {
 					deep--;
-					$(n).prop('checked', 'checked');
+					$(n).prop("checked", true);
 				}
 			});
 			//选中下级
 			$(this).nextAll(":checkbox").each(function(i, n){
-				if (($(n).attr("deep") > deep2)) {
-					if (($(n).next().next(":checkbox").attr("deep") > deep)) {
-						$(this).prop('checked', 'checked');
+				if (($(n).attr("data-deep") > deep2)) {
+					if (($(n).next().next(":checkbox").attr("data-deep") > deep)) {
+						$(this).prop("checked", true);
 					} else {
-						$(this).prop('checked', 'checked');
+						$(this).prop("checked", true);
 						deep2++;
 					}
 				}
 			});
 		} else {
-			var deep = $(this).attr("deep");
+			var deep = $(this).attr("data-deep");
 			//取消下级
 			$(this).nextAll(":checkbox").each(function(i, n){
-				if (($(n).attr("deep") > deep)) {
-					if (($(n).next().next(":checkbox").attr("deep") > deep)) {
-						$(this).removeProp("checked");
+				if (($(n).attr("data-deep") > deep)) {
+					if (($(n).next().next(":checkbox").attr("data-deep") > deep)) {
+						$(this).prop("checked", false);
 					} else {
-						$(this).removeProp("checked");
+						$(this).prop("checked", false);
 						deep++;
 					}
 				}
 			});
 		}
 	});
+	$("#all-auth").click(function(){
+		if ($(this).prop("checked"))
+			$(this).nextAll(":checkbox").prop("checked", false).prop("disabled", true);
+		else
+			$(this).nextAll(":checkbox").prop("disabled", false);
+	});
+	if ($("#all-auth").prop("checked"))
+		$("#all-auth").nextAll(":checkbox").prop("checked", false).prop("disabled", true);
 </script>
